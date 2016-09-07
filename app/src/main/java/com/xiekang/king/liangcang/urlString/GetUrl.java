@@ -11,15 +11,26 @@ public class GetUrl {
      */
 
     //分类
-    public static final String CATAGORY_URL = "http://mobile.iliangcang.com/goods/goodsCategory?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static final String SHOP_CATAGORY_URL = "http://mobile.iliangcang.com/goods/goodsCategory?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     //品牌
-    public static final String CATAGORY_BRAND_URL = "mobile.iliangcang.com/brand/brandList?app_key=Android&count=20&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static String ShopBrandUrl(int page) {
+        return "mobile.iliangcang.com/brand/brandList?app_key=Android&count=20&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
     //首页
-    public static final String CATAGORY_HOME_URL = "http://mobile.iliangcang.com/goods/shopHome?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static final String SHOP_HOME_URL = "http://mobile.iliangcang.com/goods/shopHome?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+
     //专题
-    public static final String CATAGORY_TOPIC_URL = "mobile.iliangcang.com/goods/shopSpecial?app_key=Android&count=10&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static String getShopTopicUrl(int page) {
+        return "mobile.iliangcang.com/goods/shopSpecial?app_key=Android&count=10&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
     //搜索 输入关键字
-    public static String getCatagorySearchUrl(String keyword) {
+    public static String getShopSearchUrl(String keyword) {
         return "http://mobile.iliangcang.com/goods/search?app_key=Android&count=10&is_outter=0&keyword=" +
                 keyword +
                 "&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
@@ -40,26 +51,63 @@ public class GetUrl {
     * 达人
     */
     //默认排序
-    public static final String ORDER_DEFAULT_URL = "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-    //最多排序
-    public static final String ORDER_SUM_URL = "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=goods_sum&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-    //最受欢迎
-    public static final String ORDER_FOLLWER_URL = "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=followers&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-    //最新排序
-    public static final String ORDER_ACTION_URL = "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=action_time&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-    //最新加入
-    public static final String ORDER_TIME_URL = "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=reg_time&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-    //搜索
-    public static final String ORDER_SEARCH_URL = "http://mobile.iliangcang.com/user/search?app_key=Android&count=18&keyword=11&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static String getOrderDefaultUrl(int page) {
+        return "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
 
+    //最多排序
+    public static String getOrderSumUrl(int page) {
+        return "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=goods_sum&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
+    //最受欢迎
+    public static String getOrderFollwerUrl(int page) {
+        return "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=followers&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
+    //最新排序
+    public static String getOrderActionUrl(int page) {
+        return "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=action_time&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
+    //最新加入
+    public static String getOrderTimeUrl(int page) {
+        return "http://mobile.iliangcang.com/user/masterList?app_key=Android&count=18&orderby=reg_time&page=" +
+                page  +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
+    //搜索
+    public static String getOrderSearchUrl(int page) {
+        return "http://mobile.iliangcang.com/user/search?app_key=Android&count=18&keyword=11&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
 
     /**
      * 分享
      */
     //全部分享
-    public static final String SHARE_ALL_URL = "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&type=0&v=1.0";
+    public static String getShareAllUrl(int page) {
+        return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&type=0&v=1.0";    }
+
     //商店分享
-    public static final String SHARE_SHOP_URL = "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=1&self_host=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    public static String getShareShopUrl(int page) {
+        return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=" +
+                page +
+                "&self_host=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+
     //分类分享
     public static String getShareCategoryUrl(int type) {
         return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&type=" +

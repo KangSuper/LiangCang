@@ -3,9 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.handmark.pulltorefresh.library.PullToRefreshGridView
-        android:id="@+id/shop_category_grid_view"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/shop_brand_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp" />
+        android:layout_height="match_parent"/>
 </LinearLayout>

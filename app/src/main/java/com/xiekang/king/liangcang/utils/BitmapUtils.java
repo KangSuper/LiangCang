@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -154,4 +155,25 @@ public class BitmapUtils {
         }
         return inSampleSize;
     }
+
+    public static void bitmapIntoImageView(final String url, final ImageView imageView, final int resCode,int resW,int resH){
+        imageView.setTag(url);
+        Bitmap bitmap = LruCacheTool.readCache(url);
+        if (bitmap == null){
+            load(url).compress(resW,resW).callBack(new BitmapCallBack() {
+                @Override
+                public void successBitmap(Bitmap bitmap, int requestCode) {
+                    if (requestCode == resCode && imageView.getTag().equals(url)){
+                        LruCacheTool.writeCache(url,bitmap);
+                        imageView.setImageBitmap(bitmap);
+                    }
+                }
+            },resCode);
+        }else {
+            if (imageView.getTag().equals(url)){
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
 }
