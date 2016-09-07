@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@color/colorBlank"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/shop_search_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/search_icon"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="商店"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorWhite"/>
+
+        <ImageView
+            android:id="@+id/shop_cart_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/actionbar_navigation_cart"/>
+    </RelativeLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/shop_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1c1c1c"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextColor="#656565"
+        app:tabIndicatorColor="@color/colorWhite"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/shop_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

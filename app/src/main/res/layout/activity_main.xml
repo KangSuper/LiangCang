@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <RadioGroup
+        android:id="@+id/main_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#16171a"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/main_shop_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="商店"
+            android:textColor="@color/colorWhite"
+            android:drawableTop="@drawable/shape_shop_check" />
+
+        <RadioButton
+            android:id="@+id/main_mgz_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="杂志"
+            android:textColor="@color/colorWhite"
+            android:drawableTop="@drawable/shape_magezine_check" />
+
+        <RadioButton
+            android:id="@+id/main_talent_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="达人"
+            android:textColor="@color/colorWhite"
+            android:drawableTop="@drawable/shape_talent_check" />
+
+        <RadioButton
+            android:id="@+id/main_share_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="@color/colorWhite"
+            android:drawableTop="@drawable/shape_share_check" />
+
+        <RadioButton
+            android:id="@+id/main_self_rb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@color/colorWhite"
+            android:drawableTop="@drawable/shape_self_check" />
+    </RadioGroup>
+
+
+    <FrameLayout
+        android:id="@+id/main_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/main_radio_group" />
+</RelativeLayout>
