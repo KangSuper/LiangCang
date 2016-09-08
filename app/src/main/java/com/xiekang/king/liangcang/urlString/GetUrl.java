@@ -13,7 +13,7 @@ public class GetUrl {
     //分类
     public static final String SHOP_CATAGORY_URL = "http://mobile.iliangcang.com/goods/goodsCategory?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     //品牌
-    public static String ShopBrandUrl(int page) {
+    public static String getShopBrandUrl(int page) {
         return "mobile.iliangcang.com/brand/brandList?app_key=Android&count=20&page=" +
                 page +
                 "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
