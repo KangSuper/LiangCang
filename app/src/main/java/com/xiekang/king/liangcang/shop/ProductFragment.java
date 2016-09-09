@@ -16,6 +16,9 @@ public class ProductFragment extends Fragment {
 
     public static ProductFragment newInstance(int id) {
         ProductFragment fragment = new ProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id",id+"");
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -23,13 +26,12 @@ public class ProductFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        String id = getArguments().getString("id");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView textView = new TextView(mContext);
-        textView.setText("达人");
-        return textView;
+        return null;
     }
 }

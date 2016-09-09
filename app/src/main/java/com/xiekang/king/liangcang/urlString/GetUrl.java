@@ -21,7 +21,7 @@ public class GetUrl {
      * @param order 排序条件 默认为null
      * @return
      */
-    public static String getShopDetailsUrl(int id,int page,String order){
+    public static String getShopDetailsUrl(String id,int page,String order){
         return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&cat_code=00" +
                 id +
                 "&count=10&coverId=1&" +
