@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BrandFragment extends Fragment implements JsonCallBack {
+public class BrandFragment extends Fragment {
     private Context mContext;
     private ListView mListView;
     private PullToRefreshListView mRefreshView;
@@ -56,7 +56,17 @@ public class BrandFragment extends Fragment implements JsonCallBack {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-        HttpUtils.load(GetUrl.getShopBrandUrl(page)).callBack(this, 5);
+        String shopBrandUrl = GetUrl.getShopBrandUrl(page);
+        HttpUtils.load(shopBrandUrl).callBack(new JsonCallBack() {
+            @Override
+            public void successJson(String result, int requestCode) {
+                Gson gson = new Gson();
+                BrandBean brandBean = gson.fromJson(result, BrandBean.class);
+                itemsBeanList.addAll(brandBean.getData().getItems());
+                mAdapter.notifyDataSetChanged();
+                mRefreshView.setLastUpdatedLabel("最后更新:" + DateUtils.getCurrentTime());
+            }
+        }, 5);
     }
 
     @Nullable
@@ -86,7 +96,7 @@ public class BrandFragment extends Fragment implements JsonCallBack {
                         Gson gson = new Gson();
                         BrandBean brandBean = gson.fromJson(result, BrandBean.class);
                         itemsBeanList.addAll(brandBean.getData().getItems());
-                        mHandler.sendEmptyMessage(1);
+                        mHandler.sendEmptyMessageDelayed(1, 100);
                     }
                 }
             }, 4);
@@ -101,7 +111,8 @@ public class BrandFragment extends Fragment implements JsonCallBack {
                     if (requestCode == 6) {
                         Gson gson = new Gson();
                         BrandBean brandBean = gson.fromJson(result, BrandBean.class);
-                        itemsBeanList.addAll(brandBean.getData().getItems());
+                        List<BrandBean.DataBean.ItemsBean> items = brandBean.getData().getItems();
+                        itemsBeanList.addAll(items);
                         mHandler.sendEmptyMessage(1);
                     }
                 }
@@ -109,19 +120,10 @@ public class BrandFragment extends Fragment implements JsonCallBack {
         }
     };
 
-    @Override
-    public void successJson(String result, int requestCode) {
-        if (requestCode == 5) {
-            Gson gson = new Gson();
-            BrandBean brandBean = gson.fromJson(result, BrandBean.class);
-            itemsBeanList.addAll(brandBean.getData().getItems());
-            mAdapter.notifyDataSetChanged();
-            mRefreshView.setLastUpdatedLabel("最后更新:" + DateUtils.getCurrentTime());
-        }
-    }
-
 
     class MyAdapter extends BaseAdapter {
+
+        private static final String TAG = "androidxx";
 
         @Override
         public int getCount() {
@@ -142,23 +144,27 @@ public class BrandFragment extends Fragment implements JsonCallBack {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             ViewHodler viewHodler;
-            if (view == null){
-                view = LayoutInflater.from(mContext).inflate(R.layout.brand_item_view,parent,false);
+            if (view == null) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.brand_item_view, parent, false);
                 viewHodler = new ViewHodler(view);
-            }else {
+            } else {
                 viewHodler = (ViewHodler) view.getTag();
             }
             BrandBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
-            BitmapUtils.bitmapIntoImageView(itemsBean.getBrand_logo(),viewHodler.imageView,7,80,80);
+            String brand_logo = itemsBean.getBrand_logo();
+            ImageView imageView = viewHodler.imageView;
+            imageView.setImageResource(R.drawable.brand_logo_empty);
+            BitmapUtils.bitmapIntoImageView(brand_logo, imageView, 7, 80, 80);
+//            Picasso.with(mContext).load(brand_logo).resize(80,80).into(viewHodler.imageView);
             viewHodler.textView.setText(itemsBean.getBrand_name());
             return view;
         }
 
 
-
         class ViewHodler {
             public ImageView imageView;
             public TextView textView;
+
             public ViewHodler(View view) {
                 view.setTag(this);
                 imageView = (ImageView) view.findViewById(R.id.brand_item_image);

@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
  */
 public class BitmapUtils {
     private static ExecutorService executorService;
+    static int i = 0;
 
     /**
      * 程序的入口
@@ -126,7 +127,7 @@ public class BitmapUtils {
                             options.inJustDecodeBounds = false;
                             bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
                         } else {
-                            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         }
                         Message message = mHandler.obtainMessage();
                         message.obj = bitmap;
@@ -156,21 +157,24 @@ public class BitmapUtils {
         return inSampleSize;
     }
 
-    public static void bitmapIntoImageView(final String url, final ImageView imageView, final int resCode,int resW,int resH){
-        imageView.setTag(url);
+    public static void bitmapIntoImageView(final String url, final ImageView imageView, final int resCode, int resW, int resH) {
         Bitmap bitmap = LruCacheTool.readCache(url);
-        if (bitmap == null){
-            load(url).compress(resW,resW).callBack(new BitmapCallBack() {
+        imageView.setTag(url);
+        if (bitmap == null) {
+            load(url).compress(resW, resW).callBack(new BitmapCallBack() {
+
                 @Override
                 public void successBitmap(Bitmap bitmap, int requestCode) {
-                    if (requestCode == resCode && imageView.getTag().equals(url)){
-                        LruCacheTool.writeCache(url,bitmap);
-                        imageView.setImageBitmap(bitmap);
+                    if (requestCode == resCode && imageView.getTag().toString().equals(url)) {
+                        if (bitmap != null){
+                            LruCacheTool.writeCache(url, bitmap);
+                            imageView.setImageBitmap(bitmap);
+                        }
                     }
                 }
-            },resCode);
-        }else {
-            if (imageView.getTag().equals(url)){
+            }, resCode);
+        } else {
+            if (imageView.getTag().toString().equals(url)) {
                 imageView.setImageBitmap(bitmap);
             }
         }
