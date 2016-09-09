@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <RelativeLayout
+        android:id="@+id/re"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/share_search"
+            android:onClick="click"
+            android:layout_centerVertical="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ease_search_bar_icon_normal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="分享"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"/>
+        <Button
+            android:id="@+id/share_set"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:onClick="mClick"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/actionbar_navigation_menu"/>
+    </RelativeLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:id="@+id/share_pull_grid"
+        android:layout_below="@id/re"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <!--<FrameLayout-->
+    <!--android:id="@+id/share_fram"-->
+    <!--android:layout_below="@id/re"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+</RelativeLayout>

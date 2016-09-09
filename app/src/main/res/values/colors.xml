@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlank">#15171a</color>
+    <color name="colorLine">#EAEAEA</color>
+    <color name="colorText">#6E7479</color>
+    <color name="colorTranspant">#00ffffff</color>
+    <color name="colorBule">#398DEE</color>
+    <color name="colorBlue2">#6E96C1</color>
 </resources>
