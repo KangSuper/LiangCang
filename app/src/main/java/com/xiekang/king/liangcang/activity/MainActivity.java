@@ -16,10 +16,14 @@ import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.magezine.MagezineFragment;
 import com.xiekang.king.liangcang.self.SelfFragment;
 import com.xiekang.king.liangcang.share.ShareFragment;
+import com.xiekang.king.liangcang.shop.ProductFragment;
 import com.xiekang.king.liangcang.shop.ShopFragment;
+import com.xiekang.king.liangcang.shop.gift.GiftProFragment;
 import com.xiekang.king.liangcang.talent.TalentFragment;
+import com.xiekang.king.liangcang.utils.FragmentCallBack;
+import com.xiekang.king.liangcang.utils.GiftCallBack;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentCallBack,GiftCallBack{
 
     private FragmentManager mFragmentManager;
     private Fragment mCurrentShowFragment;
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private TalentFragment talentFragment;
     private ShareFragment shareFragment;
     private SelfFragment selfFragment;
+    private ProductFragment productFragment;
+    private GiftProFragment giftProFragment;
 
 
     @Override
@@ -127,5 +133,31 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+    }
+
+    @Override
+    public void dataCall(String id) {
+        productFragment = ProductFragment.newInstance(id);
+        ctrlFragment(productFragment);
+    }
+
+    @Override
+    public void backCall() {
+        ctrlFragment(shopFragment);
+        mFragmentManager.beginTransaction().remove(productFragment).commit();
+    }
+
+
+
+    @Override
+    public void gDataCall(String id) {
+        giftProFragment = GiftProFragment.newInstance(id);
+        ctrlFragment(giftProFragment);
+    }
+
+    @Override
+    public void gBackCall() {
+        ctrlFragment(shopFragment);
+        mFragmentManager.beginTransaction().remove(giftProFragment).commit();
     }
 }

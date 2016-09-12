@@ -10,12 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.xiekang.king.liangcang.bean.shop.CgDetailsBean;
+import com.xiekang.king.liangcang.urlString.GetUrl;
+import com.xiekang.king.liangcang.utils.HttpUtils;
+import com.xiekang.king.liangcang.utils.JsonCallBack;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class BrandStoryFragment extends Fragment {
     private Context mContext;
-
-    public static BrandStoryFragment newInstance() {
+    private List<CgDetailsBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
+    public static BrandStoryFragment newInstance(String desc) {
         BrandStoryFragment fragment = new BrandStoryFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("desc", desc);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -29,7 +41,8 @@ public class BrandStoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         TextView textView = new TextView(mContext);
-        textView.setText("我的");
+        String desc = getArguments().getString("desc");
+        textView.setText(desc);
         return textView;
     }
 }

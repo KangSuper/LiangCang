@@ -7,9 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.bean.shop.CategoryBean;
+import com.xiekang.king.liangcang.shop.ProductFragment;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.BitmapUtils;
 import com.xiekang.king.liangcang.utils.DateUtils;
@@ -31,6 +34,7 @@ import java.util.List;
 
 
 public class CategoryFragment extends Fragment implements JsonCallBack {
+    private static final String TAG = "androidxx";
     private Context mContext;
     private GridView mGridView;
     private List<CategoryBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
@@ -53,9 +57,17 @@ public class CategoryFragment extends Fragment implements JsonCallBack {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        if (mContext instanceof FragmentCallBack){
+            fragmentCallBack = (FragmentCallBack) mContext;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         HttpUtils.load(GetUrl.SHOP_CATAGORY_URL).callBack(this, 1);
     }
 
@@ -69,10 +81,21 @@ public class CategoryFragment extends Fragment implements JsonCallBack {
         mGridView.setNumColumns(2);
         mGridView.setHorizontalSpacing(20);
         mGridView.setVerticalSpacing(8);
+
         mAdapter = new MyAdapter();
         mGridView.setAdapter(mAdapter);
+
+        mGridView.setOnItemClickListener(itemClickListener);
         return view;
     }
+
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String cat_id = itemsBeanList.get(position).getCat_id();
+            fragmentCallBack.dataCall(cat_id);
+        }
+    };
 
     private PullToRefreshBase.OnRefreshListener2 refreshListener2 = new PullToRefreshBase.OnRefreshListener2() {
         //上拉

@@ -86,13 +86,6 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
         //view_category = getLayoutInflater().inflate(R.layout.share_menu_category,null);
         view_menu = LayoutInflater.from(mContext).inflate(R.layout.share_menu,null);
         popupWindow = new PopupWindow(view_menu, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT,true);
-//        // popupWindow_category = new PopupWindow(view_category, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT,true);
-//        framlayout = (FrameLayout)view.findViewById(R.id.share_fram);
-//        supportFragmentManager =getFragmentManager();
-//        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
-//        Fragment_share fragment_share = new Fragment_share();
-//        fragmentTransaction.replace(R.id.share_fram,fragment_share);
-//        fragmentTransaction.commit();
     }
 
     private void initmenudata() {

@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/product_top_relative"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@color/colorBlank"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/product_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ease_mm_title_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="商店"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorWhite"/>
+
+        <ImageView
+            android:id="@+id/product_cart_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/actionbar_navigation_cart"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/product_show_relative"
+        android:layout_below="@id/product_top_relative"
+        android:layout_width="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_height="40dp">
+        <TextView
+            android:id="@+id/product_category_txt"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:text="价格筛选"
+            android:textColor="@color/colorBlank"
+            android:drawablePadding="250dp"/>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_order_arrow_down"
+            android:layout_centerVertical="true"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="5dp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:layout_below="@id/product_show_relative"
+        android:background="@drawable/listview_divider"/>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:padding="7dp"
+        android:id="@+id/product_good_grid"
+        android:numColumns="2"
+        android:layout_below="@id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ListView
+        android:id="@+id/product_order_list"
+        android:layout_below="@id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:divider="@drawable/listview_divider"
+        android:dividerHeight="1dp"/>
+
+</RelativeLayout>

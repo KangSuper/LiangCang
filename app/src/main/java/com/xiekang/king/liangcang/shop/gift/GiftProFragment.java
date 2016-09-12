@@ -29,6 +29,7 @@ import com.xiekang.king.liangcang.bean.shop.OrderBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.DateUtils;
 import com.xiekang.king.liangcang.utils.FragmentCallBack;
+import com.xiekang.king.liangcang.utils.GiftCallBack;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 
@@ -52,7 +53,7 @@ public class GiftProFragment extends Fragment {
     private String params = null;
     private TextView mCategoryTxt;
     private RelativeLayout mRelative;
-    private FragmentCallBack fragmentCallBack;
+    private GiftCallBack giftCallBack;
     private boolean isShow;
     private Handler mHandler = new Handler() {
         @Override
@@ -77,8 +78,8 @@ public class GiftProFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-        if (mContext instanceof FragmentCallBack) {
-            fragmentCallBack = (FragmentCallBack) mContext;
+        if (mContext instanceof GiftCallBack) {
+            giftCallBack = (GiftCallBack) mContext;
         }
 
 
@@ -93,7 +94,7 @@ public class GiftProFragment extends Fragment {
         mBackImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentCallBack.backCall();
+                giftCallBack.gBackCall();
             }
         });
         mCartImg = (ImageView) view.findViewById(R.id.product_cart_img);
@@ -136,7 +137,7 @@ public class GiftProFragment extends Fragment {
                 params = orderBean.getOrderParams();
                 page = 1;
                 itemsBeanList.clear();
-                String shopDetailsUrl = GetUrl.getShopDetailsUrl(id, page, params);
+                String shopDetailsUrl = GetUrl.getShopGiftUrl(id, page, params);
                 HttpUtils.load(shopDetailsUrl).callBack(new JsonCallBack() {
                     @Override
                     public void successJson(String result, int requestCode) {
@@ -170,10 +171,7 @@ public class GiftProFragment extends Fragment {
     private void loadData() {
         itemsBeanList.clear();
         id = getArguments().getString("gid");
-        if (id.length() == 2) {
-            id = 0 + id;
-        }
-        String shopDetailsUrl = GetUrl.getShopDetailsUrl(id, page, params);
+        String shopDetailsUrl = GetUrl.getShopGiftUrl(id, page, params);
         HttpUtils.load(shopDetailsUrl).callBack(new JsonCallBack() {
             @Override
             public void successJson(String result, int requestCode) {
@@ -188,11 +186,11 @@ public class GiftProFragment extends Fragment {
 
 
         orderBeanList.add(new OrderBean("价格筛选", "全部", null));
-        orderBeanList.add(new OrderBean("0-200", "0-200", "max=200&orderby=price&"));
-        orderBeanList.add(new OrderBean("201-500", "201-500", "max=500&min=201&orderby=price&"));
-        orderBeanList.add(new OrderBean("501-1000", "501-1000", "max=1000&min=501&orderby=price&"));
-        orderBeanList.add(new OrderBean("1001-3000", "1001-3000", "max=3000&min=1001&orderby=price&"));
-        orderBeanList.add(new OrderBean("3000以上", "3000以上", "min=3000&orderby=price&"));
+        orderBeanList.add(new OrderBean("0-200", "0-200", "max=200&"));
+        orderBeanList.add(new OrderBean("201-500", "201-500", "max=500&min=201&"));
+        orderBeanList.add(new OrderBean("501-1000", "501-1000", "max=1000&min=501&"));
+        orderBeanList.add(new OrderBean("1001-3000", "1001-3000", "max=3000&min=1001&"));
+        orderBeanList.add(new OrderBean("3000以上", "3000以上", "min=3000&"));
     }
 
 
@@ -202,7 +200,7 @@ public class GiftProFragment extends Fragment {
         public void onPullDownToRefresh(PullToRefreshBase refreshView) {
             page = 1;
             itemsBeanList.clear();
-            HttpUtils.load(GetUrl.getShopDetailsUrl(id, page, params)).callBack(new JsonCallBack() {
+            HttpUtils.load(GetUrl.getShopGiftUrl(id, page, params)).callBack(new JsonCallBack() {
                 @Override
                 public void successJson(String result, int requestCode) {
                     if (requestCode == 22) {
@@ -218,7 +216,7 @@ public class GiftProFragment extends Fragment {
         @Override
         public void onPullUpToRefresh(PullToRefreshBase refreshView) {
             page++;
-            HttpUtils.load(GetUrl.getShopDetailsUrl(id, page, params)).callBack(new JsonCallBack() {
+            HttpUtils.load(GetUrl.getShopGiftUrl(id, page, params)).callBack(new JsonCallBack() {
                 @Override
                 public void successJson(String result, int requestCode) {
                     if (requestCode == 23) {

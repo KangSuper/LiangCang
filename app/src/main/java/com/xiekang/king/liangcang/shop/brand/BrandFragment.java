@@ -2,14 +2,17 @@ package com.xiekang.king.liangcang.shop.brand;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.BrandDetailsActivity;
 import com.xiekang.king.liangcang.bean.brand.BrandBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.BitmapUtils;
@@ -79,9 +83,22 @@ public class BrandFragment extends Fragment {
         mListView = mRefreshView.getRefreshableView();
         mAdapter = new MyAdapter();
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(itemClickListener);
         return view;
     }
 
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(mContext, BrandDetailsActivity.class);
+            BrandBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position - 1);
+            intent.putExtra("id", itemsBean.getBrand_id()+"");
+            intent.putExtra("url",itemsBean.getBrand_logo());
+            intent.putExtra("name",itemsBean.getBrand_name());
+            startActivity(intent);
+        }
+    };
 
     private PullToRefreshBase.OnRefreshListener2 refreshListener2 = new PullToRefreshBase.OnRefreshListener2() {
         //上拉
@@ -123,7 +140,6 @@ public class BrandFragment extends Fragment {
 
     class MyAdapter extends BaseAdapter {
 
-        private static final String TAG = "androidxx";
 
         @Override
         public int getCount() {
