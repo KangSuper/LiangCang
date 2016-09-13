@@ -14,7 +14,6 @@
             android:id="@+id/magazine_time_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Today"
             android:layout_centerVertical="true"
             android:textColor="@color/colorBlue3"/>
 
