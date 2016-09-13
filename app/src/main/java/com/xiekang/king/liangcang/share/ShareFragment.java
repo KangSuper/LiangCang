@@ -357,10 +357,11 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Goods_DetailActivity.class);
-                    intent.putExtra("id",share_conver.id);
-                    intent.putExtra("sale_by",share_conver.sale_by);
-                    startActivity(intent);
+                    if (share_conver.sale_by.equals("other")){
+                        Intent intent = new Intent(mContext, Goods_DetailActivity.class);
+                        intent.putExtra("id",share_conver.id);
+                        startActivity(intent);
+                    }
                 }
             });
             return view;

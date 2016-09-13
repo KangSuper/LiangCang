@@ -121,7 +121,6 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
     private void loaddata() {
         Intent intent = getIntent();
         id =  intent.getExtras().getString("id");
-        sale_by = intent.getExtras().getString("sale_by");
         HttpUtils.load(GetUrl.getGoodsDetail(id)).callBack(this,1);
         HttpUtils.load(GetUrl.getGoodsComments(id,page)).callBack(this,2);
     }
