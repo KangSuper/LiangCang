@@ -15,7 +15,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -155,15 +157,29 @@ public class TopicFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView imageView = (ImageView) convertView;
-            if (imageView == null) {
-                imageView = new ImageView(mContext);
+            ViewHodler viewHodler;
+            if (convertView == null){
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_topic_item,parent,false);
+                viewHodler = new ViewHodler(convertView);
+            }else {
+                viewHodler = (ViewHodler) convertView.getTag();
             }
-            imageView.setMaxHeight(200);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            String coverNewImg = itemsBeanList.get(position).getCover_img_new();
-            BitmapUtils.bitmapIntoImageView(coverNewImg, imageView, 13, 300, 150);
-            return imageView;
+            TopicBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
+            viewHodler.topicTxt.setText(itemsBean.getTopic_name());
+            Glide.with(mContext).load(itemsBean.getCover_img_new()).into(viewHodler.imageView);
+            return convertView;
+        }
+
+        class ViewHodler{
+            public ImageView imageView;
+            public TextView topicTxt;
+
+            public ViewHodler(View view) {
+                view.setTag(this);
+                imageView = (ImageView) view.findViewById(R.id.topic_item_img);
+                imageView.setAlpha(0.8f);
+                topicTxt = (TextView) view.findViewById(R.id.topic_item_txt);
+            }
         }
     }
 

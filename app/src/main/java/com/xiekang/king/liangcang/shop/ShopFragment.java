@@ -2,6 +2,7 @@ package com.xiekang.king.liangcang.shop;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ProductSearchActivity;
 import com.xiekang.king.liangcang.shop.brand.BrandFragment;
 import com.xiekang.king.liangcang.shop.category.CategoryFragment;
 import com.xiekang.king.liangcang.shop.gift.GiftFragment;
@@ -66,9 +68,20 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop, container, false);
         mCartImg = (ImageView) view.findViewById(R.id.shop_cart_img);
+
         mSearchImg = (ImageView) view.findViewById(R.id.shop_search_img);
+        mSearchImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ProductSearchActivity.class);
+                startActivity(intent);
+            }
+        });
         mTabLayout = (TabLayout) view.findViewById(R.id.shop_tab_layout);
         mViewPager = (ViewPager) view.findViewById(R.id.shop_view_pager);
+
+
+
         mTabLayout.addTab(mTabLayout.newTab());
         mTabLayout.addTab(mTabLayout.newTab());
         mTabLayout.addTab(mTabLayout.newTab());

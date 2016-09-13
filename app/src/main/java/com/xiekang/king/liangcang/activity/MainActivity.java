@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.magezine.MagezineFragment;
+import com.xiekang.king.liangcang.magezine.MagazineFragment;
 import com.xiekang.king.liangcang.self.SelfFragment;
 import com.xiekang.king.liangcang.share.ShareFragment;
 import com.xiekang.king.liangcang.shop.ProductFragment;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
             isExit = false;
         }
     };
-    private MagezineFragment magezineFragment;
+    private MagazineFragment magazineFragment;
     private TalentFragment talentFragment;
     private ShareFragment shareFragment;
     private SelfFragment selfFragment;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
     private void initFragment() {
         mFragmentManager = getSupportFragmentManager();
         shopFragment = ShopFragment.newInstance();
-        magezineFragment = MagezineFragment.newInstance();
+        magazineFragment = MagazineFragment.newInstance();
         talentFragment = TalentFragment.newInstance();
         shareFragment = ShareFragment.newInstance();
         selfFragment = SelfFragment.newInstance();
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
                     ctrlFragment(shopFragment);
                     break;
                 case R.id.main_mgz_rb:
-                    ctrlFragment(magezineFragment);
+                    ctrlFragment(magazineFragment);
                     break;
                 case R.id.main_talent_rb:
                     ctrlFragment(talentFragment);

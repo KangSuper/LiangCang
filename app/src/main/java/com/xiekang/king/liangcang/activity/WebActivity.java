@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.WebSettings;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,6 +48,13 @@ public class WebActivity extends Activity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             }
         });
+        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setDefaultTextEncodingName("UTF-8");
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+
         webView.loadUrl(url);
     }
 }

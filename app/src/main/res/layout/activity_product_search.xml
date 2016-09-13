@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xiekang.king.liangcang.activity.ProductSearchActivity">
+
+    <EditText
+        android:id="@+id/search_product_edit_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:background="@color/colorWhite"
+        android:hint="搜索"
+        android:textSize="17dp"
+        android:textColorHint="@color/colorGery"
+        android:textColor="@color/colorBlank"/>
+
+    <ImageView
+        android:id="@+id/search_product_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search_icon_dark"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"/>
+
+    <GridView
+        android:layout_below="@id/search_product_edit_view"
+        android:layout_margin="10dp"
+        android:id="@+id/search_product_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"/>
+</RelativeLayout>
