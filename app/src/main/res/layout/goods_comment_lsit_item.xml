@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <ImageView
+        android:id="@+id/goods_comment_head"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+        android:layout_centerVertical="true"/>
+    <TextView
+        android:id="@+id/goods_comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="@color/colorText"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@id/goods_comment_head"
+        android:layout_toRightOf="@id/goods_comment_head"/>
+    <TextView
+        android:id="@+id/goods_comment_reply"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:layout_alignTop="@id/goods_comment_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="10sp"
+        android:text="回复" />
+    <TextView
+        android:id="@+id/goods_comment_time"
+        android:layout_toRightOf="@id/goods_comment_head"
+        android:layout_alignBottom="@id/goods_comment_head"
+        android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/colorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

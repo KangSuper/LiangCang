@@ -60,6 +60,8 @@
                 android:layout_height="30dp"
                 android:textSize="12sp"
                 android:onClick="click"
+                android:text="Link"
+                android:textColor="@color/colorWhite"
                 android:background="@drawable/bonus_invalid_bg"
                 android:layout_marginBottom="20dp"/>
             <ImageView
@@ -75,7 +77,7 @@
                 android:layout_toRightOf="@id/share_detail_owner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:layout_alignBottom="@id/share_detail_owner"
                 android:textColor="@color/colorBlue2"/>
             <TextView
@@ -84,37 +86,39 @@
                 android:layout_toRightOf="@id/share_detail_owner_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:layout_alignBottom="@id/share_detail_owner"
                 android:textColor="@color/colorWhite"
                 android:text="推荐"/>
+            <ListView
+                android:id="@+id/share_detail_listview"
+                android:layout_below="@id/share_detail_owner"
 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/share_detail_loadcomment"
+                android:layout_below="@id/share_detail_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/colorBlue2"
+                android:gravity="center"
+                android:text="查看更多评论"
+                android:background="@color/colorTranspant"
+                android:onClick="click"/>
             <Button
                 android:id="@+id/share_detail_write"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_alignParentBottom="true"
-                android:textSize="15sp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/share_detail_loadcomment"
+                android:textSize="18sp"
                 android:textColor="@color/colorWhite"
                 android:gravity="center"
                 android:text="写点什么"
                 android:onClick="click"/>
-            <Button
-                android:id="@+id/share_detail_loadcomment"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_above="@id/share_detail_write"
-                android:textSize="15sp"
-                android:textColor="@color/colorBlue2"
-                android:gravity="center"
-                android:text="查看更多评论"
-                android:onClick="click"/>
-            <ListView
-                android:id="@+id/share_detail_listview"
-                android:layout_below="@id/share_detail_owner"
-                android:layout_above="@id/share_detail_loadcomment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+
+
         </RelativeLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 </RelativeLayout>

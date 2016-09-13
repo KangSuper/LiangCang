@@ -149,9 +149,43 @@ public class GetUrl {
     }
 
     //分类分享
-    public static String getShareCategoryUrl(int type) {
-        return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&type=" +
-                type +
+    public static String getShareCategoryUrl(int type,int page) {
+        return "http://mobile.iliangcang.com/goods/goodsShare?app_key=Android&count=10&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&type=" +
+                type +"&page="+page+
                 "&v=1.0";
+    }
+    //商品详情
+    public static String getGoodsDetail(String id){
+        return "http://mobile.iliangcang.com" +
+                "/goods/goodsDetail?app_key=Android&sig=5693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0&goods_id="+id;
+    }
+    //商品评论
+    public static String getGoodsComments(String id,int page){
+        return "http://mobile.iliangcang.com" +
+                "/comments/goods?app_key=Android&count=3&sig=5693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0&goods_id="+id+"&page="+page;
+    }
+
+    /**
+     * 用户信息
+     */
+    //喜欢
+    public static String getUserLike(String id,int page){
+        return " http://mobile.iliangcang.com" +
+                "/user/masterLike?app_key=Android&count=10&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0&owner_id="+id+"&page="+page;
+    }
+    //推荐
+    public static String getUserTuijian(String id,int page){
+        return "  http://mobile.iliangcang.com" +
+                "/user/masterListInfo?app_key=Android&count=10&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+    //关注
+    public static String getUserFollow(String id,int page){
+        return "http://mobile.iliangcang.com" +
+                "/user/masterFollow?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+    }
+    //粉丝
+    public static String getUserFans(String id,int page){
+        return "http://mobile.iliangcang.com" +
+                "/user/masterFollowed?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     }
 }

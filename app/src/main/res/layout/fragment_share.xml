@@ -3,7 +3,8 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
     <RelativeLayout
         android:id="@+id/re"
         android:layout_marginBottom="10dp"
@@ -15,7 +16,7 @@
             android:layout_centerVertical="true"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/ease_search_bar_icon_normal"/>
+            android:background="@drawable/behind_sliding_search"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,8 +26,8 @@
             android:textColor="@color/colorWhite"/>
         <Button
             android:id="@+id/share_set"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:onClick="mClick"
             android:layout_alignParentRight="true"
             android:background="@drawable/actionbar_navigation_menu"/>

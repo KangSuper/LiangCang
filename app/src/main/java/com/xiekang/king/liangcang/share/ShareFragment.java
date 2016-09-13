@@ -2,6 +2,7 @@ package com.xiekang.king.liangcang.share;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,20 +27,26 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
+import com.xiekang.king.liangcang.bean.Share.Share_conver;
+import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.share.Http.HttpService;
 import com.xiekang.king.liangcang.share.Impl.ShareImpl;
+import com.xiekang.king.liangcang.urlString.GetUrl;
+import com.xiekang.king.liangcang.utils.HttpUtils;
+import com.xiekang.king.liangcang.utils.JsonCallBack;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class ShareFragment extends Fragment implements HttpService.ICallback,View.OnClickListener{
+public class ShareFragment extends Fragment implements View.OnClickListener,JsonCallBack{
     private Context mContext;
     private int count = 0;
     private Button set_bt;
@@ -53,7 +60,7 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
     private List<String>mainlist = new ArrayList<>();
     private Button search_bt;
     private MenuAdapter menuAdapter;
-
+    private String url;
     public static ShareFragment newInstance() {
         ShareFragment fragment = new ShareFragment();
         return fragment;
@@ -69,6 +76,7 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_share,container,false);
+        url = GetUrl.getShareAllUrl(page);
         initview(view);
         myadapter = new Myadapter();
         initgridview(view);
@@ -107,6 +115,10 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
         mlist.add("文化");
 
     }
+
+
+
+
     class MenuAdapter extends BaseAdapter{
 
         @Override
@@ -125,7 +137,7 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             View view = convertView;
             MenuViewholder viewholder;
             if (view==null){
@@ -135,6 +147,12 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
                 viewholder = (MenuViewholder) view.getTag();
             }
             viewholder.textview.setText(mainlist.get(position));
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
             return view;
         }
     }
@@ -159,6 +177,29 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
                 listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        mPosition = position;
+                        if(position==0){
+                            page = 1;
+                            url = GetUrl.getShareAllUrl(page);
+                            HttpUtils.load(url).callBack(ShareFragment.this,4);
+                            popupWindow.dismiss();
+
+                        }
+                        else if(position ==1){
+                            page =1;
+                            url = GetUrl.getShareShopUrl(page);
+                            HttpUtils.load(url).callBack(ShareFragment.this,4);
+                            popupWindow.dismiss();
+
+                        }
+                        else if(position>2){
+                            page=1;
+                            url=GetUrl.getShareCategoryUrl(position-2,page);
+                            HttpUtils.load(url).callBack(ShareFragment.this,4);
+                            popupWindow.dismiss();
+
+                        }
                         if (position==2){
 
                             count++;
@@ -173,7 +214,7 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
                         }
                     }
                 });
-                set_bt.setBackgroundResource(R.drawable.ease_search_clear_pressed);
+                set_bt.setBackgroundResource(R.drawable.close);
                 popupWindow.setTouchable(true);
                 popupWindow.setTouchInterceptor(new View.OnTouchListener() {
                     @Override
@@ -196,8 +237,8 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
     }
 
 
-
-    private LinkedList<String> imglist = new LinkedList<>();
+    private int mPosition;
+    private LinkedList<Share_conver> imglist = new LinkedList<>();
     private PullToRefreshGridView refreshgrid;
     private GridView gridview;
     private int page = 1;
@@ -212,7 +253,9 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
     };
 
     private void initdata() {
-        ShareImpl.down(ShareFragment.this,1,1);
+
+
+        HttpUtils.load(url).callBack(ShareFragment.this,1);
     }
 
 
@@ -235,12 +278,13 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
 
                 refreshView.getLoadingLayoutProxy()
                         .setLastUpdatedLabel("最后更新"+label);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShareImpl.down(ShareFragment.this,4,1);
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+                page = 1;
+                        HttpUtils.load(url).callBack(ShareFragment.this,4);
+//                    }
+//                }).start();
 
             }
 
@@ -248,12 +292,22 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
             public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("请稍后");
                 page++;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShareImpl.down(ShareFragment.this,2,page);
-                    }
-                }).start();
+                if (mPosition==0){
+                    url = GetUrl.getShareAllUrl(page);
+                }
+                if (mPosition==1){
+                    url = GetUrl.getShareShopUrl(page);
+                }
+                else if (mPosition>2){
+                    url = GetUrl.getShareCategoryUrl(mPosition-2,page);
+                }
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+
+                        HttpUtils.load(url).callBack(ShareFragment.this,2);
+//                    }
+//                }).start();
             }
         });
     }
@@ -297,8 +351,17 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
             }
             Log.d(TAG, "getView: "+imglist.get(position));
             viewHolder.imageView.setImageResource(R.mipmap.ic_launcher);
-            Picasso.with(mContext).load(imglist.get(position)).into(viewHolder.imageView);
+            final Share_conver share_conver = imglist.get(position);
+            Picasso.with(mContext).load(share_conver.img).into(viewHolder.imageView);
             Log.d(TAG, "getView: "+viewHolder.imageView);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, Goods_DetailActivity.class);
+                    intent.putExtra("id",share_conver.id);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }
@@ -308,38 +371,91 @@ public class ShareFragment extends Fragment implements HttpService.ICallback,Vie
             view.setTag(this);
             imageView = (ImageView) view.findViewById(R.id.share_item_img);
         }
-    }
-    @Override
-    public void success(ShareBean shareBean, int requestcode) {
-        if (requestcode == 1){
+
+        }
+    public void successJson(String result, int requestCode) {
+        Gson gson = new Gson();
+        ShareBean shareBean = gson.fromJson(result, ShareBean.class);
+
+        if (requestCode == 1){
 
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
                 String goods_image = items.get(i).getGoods_image();
-                imglist.addFirst(goods_image);
+                String goods_id = items.get(i).getGoods_id();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                imglist.addFirst(share_conver);
                 handler.sendEmptyMessage(1);
             }
         }
-        if (requestcode ==2){
+        //上拉
+        if (requestCode ==2){
 
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
+
                 String goods_image = items.get(i).getGoods_image();
-                imglist.addLast(goods_image);
+                String goods_id = items.get(i).getGoods_id();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                imglist.addLast(share_conver);
                 //刷新
                 // myadapter.notifyDataSetChanged();
                 handler.sendEmptyMessage(1);
             }
         }
-        if (requestcode == 4){
-            LinkedList<String> headlist = new LinkedList<>();
+        //下拉
+        if (requestCode == 4){
+            LinkedList<Share_conver> headlist = new LinkedList<>();
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
                 String goods_image = items.get(i).getGoods_image();
-                headlist.addFirst(goods_image);
-                imglist = headlist;
+
+                String goods_id = items.get(i).getGoods_id();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                headlist.addFirst(share_conver);
+               imglist = headlist;
                 handler.sendEmptyMessage(1);
             }
         }
     }
+//        Override
+//    public void success(ShareBean shareBean, int requestcode) {
+//        if (requestcode == 1){
+//
+//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+//            for (int i = 0; i < items.size(); i++) {
+//                String goods_image = items.get(i).getGoods_image();
+//                String goods_id = items.get(i).getGoods_id();
+//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+//                imglist.addFirst(share_conver);
+//                handler.sendEmptyMessage(1);
+//            }
+//        }
+//        if (requestcode ==2){
+//
+//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+//            for (int i = 0; i < items.size(); i++) {
+//
+//                String goods_image = items.get(i).getGoods_image();
+//                String goods_id = items.get(i).getGoods_id();
+//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+//                imglist.addFirst(share_conver);
+//                //刷新
+//                // myadapter.notifyDataSetChanged();
+//                handler.sendEmptyMessage(1);
+//            }
+//        }
+//        if (requestcode == 4){
+//            LinkedList<String> headlist = new LinkedList<>();
+//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+//            for (int i = 0; i < items.size(); i++) {
+//                String goods_image = items.get(i).getGoods_image();
+//                headlist.addFirst(goods_image);
+//                String goods_id = items.get(i).getGoods_id();
+//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+//                imglist.addFirst(share_conver);
+//                handler.sendEmptyMessage(1);
+//            }
+//        }
+//    }
 }

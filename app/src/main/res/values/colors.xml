@@ -13,4 +13,6 @@
     <color name="colorBlue3">#587899</color>
     <color name="colorGery">#9c9d9d</color>
     <color name="colorGery1">#424950</color>
+    <color name="colorButton">#CCCCCC</color>
+
 </resources>

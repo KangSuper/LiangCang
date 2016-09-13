@@ -10,5 +10,5 @@
         android:textSize="15sp"
         android:layout_marginLeft="30dp"
         android:textColor="@color/colorText"
-        android:background="@color/colorWhite"/>
+        android:background="@drawable/menu_item"/>
 </LinearLayout>
