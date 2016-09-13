@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
@@ -125,6 +126,7 @@ public class CategoryFragment extends Fragment implements JsonCallBack {
     @Override
     public void successJson(String result, int requestCode) {
         if (requestCode == 1) {
+            itemsBeanList.clear();
             Gson gson = new Gson();
             CategoryBean categoryBean = gson.fromJson(result, CategoryBean.class);
             itemsBeanList.addAll(categoryBean.getData().getItems());
@@ -158,9 +160,8 @@ public class CategoryFragment extends Fragment implements JsonCallBack {
                 imageView = new ImageView(mContext);
             }
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
             String coverNewImg = itemsBeanList.get(position).getCover_new_img();
-            BitmapUtils.bitmapIntoImageView(coverNewImg, imageView, 2, 300, 200);
+            Glide.with(mContext).load(coverNewImg).into(imageView);
             return imageView;
         }
     }

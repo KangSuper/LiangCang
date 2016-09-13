@@ -10,16 +10,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity" android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".detail.Goods_DetailActivity" />
-        <activity android:name=".activity.WebActivity" />
-        <activity android:name=".activity.BrandDetailsActivity"></activity>
+        <activity android:name=".detail.Goods_DetailActivity" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activity.WebActivity" android:hardwareAccelerated="true" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activity.BrandDetailsActivity" android:configChanges="orientation|keyboardHidden" />
+        <activity android:name=".activity.ProductSearchActivity" android:configChanges="orientation|keyboardHidden"></activity>
     </application>
 
 </manifest>

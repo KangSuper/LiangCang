@@ -68,10 +68,12 @@ public class GetUrl {
     }
 
     //搜索 输入关键字
-    public static String getShopSearchUrl(String keyword) {
+    public static String getShopSearchUrl(String keyword,int page) {
         return "http://mobile.iliangcang.com/goods/search?app_key=Android&count=10&is_outter=0&keyword=" +
                 keyword +
-                "&page=1&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+                "&page=" +
+                page +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     }
 
     /**
@@ -124,7 +126,7 @@ public class GetUrl {
     }
 
     //搜索
-    public static String getOrderSearchUrl(int page) {
+    public static String getTalentSearchUrl(int page) {
         return "http://mobile.iliangcang.com/user/search?app_key=Android&count=18&keyword=11&page=" +
                 page +
                 "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
