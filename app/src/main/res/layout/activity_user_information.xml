@@ -108,7 +108,7 @@
             android:layout_weight="1"
             android:button="@null"
             android:background="@drawable/user_bt"
-            android:textColor="@color/shape_brand_txt"
+            android:textColor="@color/colorWhite"
             android:gravity="center"
             android:textSize="10sp"/>
         <RadioButton
@@ -118,7 +118,7 @@
             android:button="@null"
             android:layout_weight="1"
             android:background="@drawable/user_bt"
-            android:textColor="@color/shape_brand_txt"
+            android:textColor="@color/colorWhite"
             android:gravity="center"
             android:textSize="10sp"/>
         <RadioButton
@@ -128,7 +128,7 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:background="@drawable/user_bt"
-            android:textColor="@color/shape_brand_txt"
+            android:textColor="@color/colorWhite"
             android:gravity="center"
             android:textSize="10sp"/>
         <RadioButton
@@ -138,14 +138,10 @@
             android:button="@null"
             android:layout_weight="1"
             android:background="@drawable/user_bt"
-            android:textColor="@color/shape_brand_txt"
+            android:textColor="@color/colorWhite"
             android:gravity="center"
             android:textSize="10sp"/>
     </RadioGroup>
-        <!--<com.handmark.pulltorefresh.library.PullToRefreshGridView-->
-            <!--android:id="@+id/user_pullgridview"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"/>-->
     <FrameLayout
         android:id="@+id/user_fram"
         android:layout_below="@id/user_radio_group"

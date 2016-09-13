@@ -64,8 +64,6 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
             myadapter1.notifyDataSetChanged();
         }
     };
-    private String sale_by;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

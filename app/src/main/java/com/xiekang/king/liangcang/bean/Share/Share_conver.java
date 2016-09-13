@@ -7,10 +7,8 @@ package com.xiekang.king.liangcang.bean.Share;
 public class Share_conver {
    public String img;
    public String id;
-    public String sale_by;
-    public Share_conver(String img,String id,String sale_by){
+    public Share_conver(String img,String id){
         this.img = img;
         this.id= id;
-        this.sale_by = sale_by;
     }
 }

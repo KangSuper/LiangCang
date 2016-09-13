@@ -357,11 +357,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (share_conver.sale_by.equals("other")){
-                        Intent intent = new Intent(mContext, Goods_DetailActivity.class);
-                        intent.putExtra("id",share_conver.id);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(mContext, Goods_DetailActivity.class);
+                    intent.putExtra("id",share_conver.id);
+                    startActivity(intent);
                 }
             });
             return view;
@@ -385,11 +383,10 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             for (int i = 0; i < items.size(); i++) {
                 String goods_image = items.get(i).getGoods_image();
                 String goods_id = items.get(i).getGoods_id();
-                String sale_by = items.get(i).getSale_by();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
                 imglist.addFirst(share_conver);
+                handler.sendEmptyMessage(1);
             }
-            handler.sendEmptyMessage(1);
         }
         //上拉
         if (requestCode ==2){
@@ -399,13 +396,12 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
 
                 String goods_image = items.get(i).getGoods_image();
                 String goods_id = items.get(i).getGoods_id();
-                String sale_by = items.get(i).getSale_by();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
                 imglist.addLast(share_conver);
                 //刷新
                 // myadapter.notifyDataSetChanged();
+                handler.sendEmptyMessage(1);
             }
-            handler.sendEmptyMessage(1);
         }
         //下拉
         if (requestCode == 4){
@@ -413,9 +409,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
                 String goods_image = items.get(i).getGoods_image();
-                String sale_by = items.get(i).getSale_by();
+
                 String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
+                Share_conver share_conver = new Share_conver(goods_image, goods_id);
                 headlist.addFirst(share_conver);
                imglist = headlist;
                 handler.sendEmptyMessage(1);
