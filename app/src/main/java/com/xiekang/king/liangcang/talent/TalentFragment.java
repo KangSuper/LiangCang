@@ -186,4 +186,13 @@ public class TalentFragment extends Fragment implements JsonCallBack{
             myadapterTalent.notifyDataSetChanged();
         }
     }
+    public void click(View view){
+        switch (view.getId()){
+            case R.id.talent_search:
+                break;
+            case R.id.talent_set:
+
+                break;
+        }
+    }
 }

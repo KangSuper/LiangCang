@@ -28,6 +28,7 @@
             android:id="@+id/talent_set"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
+            android:onClick="click"
             android:background="@drawable/actionbar_navigation_menu"
             android:layout_centerVertical="true"
             android:layout_width="20dp"
