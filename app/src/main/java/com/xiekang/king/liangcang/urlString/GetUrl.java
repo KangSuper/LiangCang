@@ -85,7 +85,15 @@ public class GetUrl {
     public static final String MGZ_AUTHOR_URL = "http://mobile.iliangcang.com/topic/magazineAuthorList?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     //杂志分类
     public static final String MGZ_CATEGORY_URL = "http://mobile.iliangcang.com/topic/magazineCatList?app_key=Android&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
-
+    //杂志选择
+    public static String getMgzSelectUrl(String category,String id){
+        return "http://mobile.iliangcang.com/topic/magazineList?app_key=Android&" +
+                category +
+                "=" +
+                id +
+                "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+        //http://mobile.iliangcang.com/topic/magazineList?app_key=Android&cat_id=21&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0
+    }
 
    /**
     * 达人

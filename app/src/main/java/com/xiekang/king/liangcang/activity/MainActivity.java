@@ -13,7 +13,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.magezine.AuthorFragment;
+import com.xiekang.king.liangcang.magezine.CateFragment;
 import com.xiekang.king.liangcang.magezine.MagazineFragment;
+import com.xiekang.king.liangcang.magezine.MgzDetailsFragment;
+import com.xiekang.king.liangcang.magezine.SelectFragment;
 import com.xiekang.king.liangcang.self.SelfFragment;
 import com.xiekang.king.liangcang.share.ShareFragment;
 import com.xiekang.king.liangcang.shop.ProductFragment;
@@ -22,8 +26,10 @@ import com.xiekang.king.liangcang.shop.gift.GiftProFragment;
 import com.xiekang.king.liangcang.talent.TalentFragment;
 import com.xiekang.king.liangcang.utils.FragmentCallBack;
 import com.xiekang.king.liangcang.utils.GiftCallBack;
+import com.xiekang.king.liangcang.utils.MgzCallBack;
+import com.xiekang.king.liangcang.utils.MgzSeCallBack;
 
-public class MainActivity extends AppCompatActivity implements FragmentCallBack,GiftCallBack{
+public class MainActivity extends AppCompatActivity implements FragmentCallBack,GiftCallBack,MgzCallBack,MgzSeCallBack{
 
     private FragmentManager mFragmentManager;
     private Fragment mCurrentShowFragment;
@@ -42,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
     private SelfFragment selfFragment;
     private ProductFragment productFragment;
     private GiftProFragment giftProFragment;
+    private MgzDetailsFragment mgzDetailsFragment;
+    private SelectFragment selectFragment;
 
 
     @Override
@@ -159,5 +167,55 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
     public void gBackCall() {
         ctrlFragment(shopFragment);
         mFragmentManager.beginTransaction().remove(giftProFragment).commit();
+    }
+
+
+    @Override
+    public void mDataCall() {
+        mgzDetailsFragment = MgzDetailsFragment.newInstance();
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
+//            fragmentTransaction.hide(mCurrentShowFragment);
+//        }
+//        if (!mgzDetailsFragment.isAdded()) {
+//            fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+//            fragmentTransaction.add(R.id.main_frame_layout, mgzDetailsFragment);
+//        } else {
+//            fragmentTransaction.show(mgzDetailsFragment);
+//        }
+//        fragmentTransaction.commit();
+//        mCurrentShowFragment = mgzDetailsFragment;
+        ctrlFragment(mgzDetailsFragment);
+    }
+
+    @Override
+    public void mBackCall() {
+        ctrlFragment(magazineFragment);
+
+//        mFragmentManager.beginTransaction().remove(CateFragment.newInstance()).remove(AuthorFragment.newInstance()).commit();
+    }
+
+
+    @Override
+    public void msDataCall(String category, String id,String title) {
+        selectFragment = SelectFragment.newInstance(category,id,title);
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
+//            fragmentTransaction.hide(mCurrentShowFragment);
+//        }
+//        if (!selectFragment.isAdded()) {
+//            fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+//            fragmentTransaction.add(R.id.main_frame_layout, selectFragment);
+//        } else {
+//            fragmentTransaction.show(selectFragment);
+//        }
+//        fragmentTransaction.commit();
+//        mCurrentShowFragment = selectFragment;
+        ctrlFragment(selectFragment);
+    }
+
+    @Override
+    public void msBackCall() {
+        ctrlFragment(magazineFragment);
     }
 }

@@ -20,8 +20,6 @@ import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollow;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollowAndFollowedsBean;
-import com.xiekang.king.liangcang.bean.UserInfo.UserLike;
-import com.xiekang.king.liangcang.bean.UserInfo.UserLikeAndRecommendBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
@@ -32,7 +30,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/9/12.
  */
-public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo{
+public class UseFollowFragment extends Fragment implements JsonCallBack, UserInfo {
     private Context context;
     public String url;
     public int page;
@@ -43,21 +41,27 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
     public String id;
     private String TAG = "androidxxx";
 
-    public UseFollowFragment(String id, int page){
-        this.id= id;
+    public UseFollowFragment(String id, int page) {
+        this.id = id;
         this.page = page;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        initdata();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.userinfo_fragment,container,false);
-        url = GetUrl.getUserFollow(id,page);
+        View view = inflater.inflate(R.layout.userinfo_fragment, container, false);
         myadapter3 = new Myadapter3();
         initview(view);
         gridview.setAdapter(myadapter3);
@@ -68,8 +72,7 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
         refreshGridView = (PullToRefreshGridView) view.findViewById(R.id.use_fragment_pullgrid);
         gridview = refreshGridView.getRefreshableView();
         gridview.setNumColumns(3);
-        initdata();
-        refreshGridView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        refreshGridView.setMode(PullToRefreshBase.Mode.BOTH);
         refreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -79,14 +82,14 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 page++;
-                url = GetUrl.getUserFollow(id,page);
-                HttpUtils.load(url).callBack(UseFollowFragment.this,2);
+                url = GetUrl.getUserFollow(id, page);
+                HttpUtils.load(url).callBack(UseFollowFragment.this, 51);
             }
         });
     }
 
     private void initdata() {
-        HttpUtils.load(url).callBack(this,1);
+        HttpUtils.load(GetUrl.getUserFollow(id, page)).callBack(this, 50);
     }
 
 
@@ -94,8 +97,7 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
 
         @Override
         public int getCount() {
-            Log.d(TAG, "getCount: "+mlist.size());
-            return mlist.size();
+            return mlist == null ? 0 : mlist.size();
         }
 
         @Override
@@ -112,35 +114,39 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             ViewHolderUser viewHolderUser;
-            if (view==null){
-                view = LayoutInflater.from(context).inflate(R.layout.userinfofragment_follow_item,parent,false);
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.userinfofragment_follow_item, parent, false);
                 viewHolderUser = new ViewHolderUser(view);
 
-            }else {
+            } else {
                 viewHolderUser = (ViewHolderUser) view.getTag();
             }
-
             UserFollow userFollow = mlist.get(position);
             Log.d(TAG, "getView: "+userFollow.img);
+            Log.d(TAG, "getView: "+userFollow.name);
+            Log.d(TAG, "getView: "+userFollow.job);
             Picasso.with(context).load(userFollow.img).into(viewHolderUser.imageView);
             viewHolderUser.name.setText(userFollow.name);
             viewHolderUser.job.setText(userFollow.job);
             return view;
         }
     }
-    class ViewHolderUser{
-       public ImageView imageView;
-        public TextView name,job;
-        public ViewHolderUser(View view){
+
+    class ViewHolderUser {
+        public ImageView imageView;
+        public TextView name, job;
+
+        public ViewHolderUser(View view) {
             view.setTag(this);
             imageView = (ImageView) view.findViewById(R.id.use_fragment_item_follow_img);
             name = (TextView) view.findViewById(R.id.use_fragment_item_follow_name);
             job = (TextView) view.findViewById(R.id.use_fragment_item_follow_job);
         }
     }
+
     @Override
     public void successJson(String result, int requestCode) {
-        if (requestCode==1){
+        if (requestCode == 50) {
             Gson gson = new Gson();
             UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
             List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
@@ -153,10 +159,9 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
                 userFollow.name = users.get(i).getUser_name();
                 mlist.add(userFollow);
                 //刷新适配器
-                myadapter3.notifyDataSetChanged();
             }
-        }
-        if (requestCode==2){
+            myadapter3.notifyDataSetChanged();
+        } else if (requestCode == 51) {
             Gson gson = new Gson();
             UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
             List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
@@ -168,16 +173,17 @@ public class UseFollowFragment extends Fragment implements JsonCallBack,UserInfo
                 userFollow.job = users.get(i).getUser_desc();
                 userFollow.name = users.get(i).getUser_name();
                 mlist.addLast(userFollow);
-                //刷新适配器
-                myadapter3.notifyDataSetChanged();
             }
+            //刷新适配器
+            myadapter3.notifyDataSetChanged();
         }
     }
+
     @Override
     public void successUse(int page) {
         this.page = 1;
-        url = GetUrl.getUserFollow(id,page);
-         HttpUtils.load(url).callBack(this,page);
+        url = GetUrl.getUserFollow(id, page);
+        HttpUtils.load(url).callBack(this, page);
     }
 
 }

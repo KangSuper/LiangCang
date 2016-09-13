@@ -3,22 +3,21 @@ package com.xiekang.king.liangcang.magezine;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.activity.WebActivity;
 import com.xiekang.king.liangcang.bean.magazine.MgzBean;
@@ -27,29 +26,34 @@ import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 import com.xiekang.king.liangcang.utils.MgzCallBack;
+import com.xiekang.king.liangcang.utils.MgzSeCallBack;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class MagazineFragment extends Fragment implements JsonCallBack {
+public class SelectFragment extends Fragment implements JsonCallBack{
     private Context mContext;
-    private TextView mTimeTxt;
+    private ImageView mBackImg;
     private TextView mTitleTxt;
-    private ExpandableListView mExpandableList;
+    private PullToRefreshListView mRefresh;
     private List<String> keyList = new ArrayList<>();
-    private Map<String,List<MgzInfoBean>> dataMap = new LinkedHashMap<>();
-    private MyAdapter mAdapter;
+    private List<MgzInfoBean> mgzInfoBeenList = new ArrayList<>();
+    private ListView mListView;
+    private MyAdapter myAdapter;
+    private MgzSeCallBack mgzSeCallBack;
     private MgzCallBack mgzCallBack;
-
-    public static MagazineFragment newInstance() {
-        MagazineFragment fragment = new MagazineFragment();
+    public static SelectFragment newInstance(String category,String gid,String title) {
+        SelectFragment fragment = new SelectFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("category",category);
+        bundle.putString("gid",gid);
+        bundle.putString("title",title);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -57,23 +61,38 @@ public class MagazineFragment extends Fragment implements JsonCallBack {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        if (mContext instanceof MgzSeCallBack){
+            mgzSeCallBack = (MgzSeCallBack) mContext;
+        }
+
         if (mContext instanceof MgzCallBack){
             mgzCallBack = (MgzCallBack) mContext;
         }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        HttpUtils.load(GetUrl.MAGEZINE_URL).callBack(this,42);
+        Bundle arguments = getArguments();
+        String category = arguments.getString("category");
+        String gid = arguments.getString("gid");
+        String title = arguments.getString("title");
+        mTitleTxt.setText("杂志*"+title);
+        HttpUtils.load(GetUrl.getMgzSelectUrl(category,gid)).callBack(this,50);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_magazine, container, false);
-        mTimeTxt = (TextView) view.findViewById(R.id.magazine_time_txt);
-        mTitleTxt = (TextView) view.findViewById(R.id.magazine_title_txt);
+        View view = inflater.inflate(R.layout.fragment_mgz_select, container, false);
+        mBackImg = (ImageView) view.findViewById(R.id.select_back_image);
+        mTitleTxt = (TextView) view.findViewById(R.id.select_title_txt);
+        mRefresh = (PullToRefreshListView) view.findViewById(R.id.select_refresh_list_view);
+        mListView = mRefresh.getRefreshableView();
+        mListView.setOnItemClickListener(itemClickListener);
+        myAdapter = new MyAdapter();
+        mListView.setAdapter(myAdapter);
 
         mTitleTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,74 +101,40 @@ public class MagazineFragment extends Fragment implements JsonCallBack {
             }
         });
 
-        mExpandableList = (ExpandableListView) view.findViewById(R.id.magazine_expandable_list);
-        mExpandableList.setGroupIndicator(null);
-        mAdapter = new MyAdapter();
-        mExpandableList.setAdapter(mAdapter);
-
-        mExpandableList.setOnChildClickListener(childClickListener);
-        mExpandableList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        mBackImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                return true;
+            public void onClick(View v) {
+                mgzSeCallBack.msBackCall();
             }
         });
-
-        mExpandableList.setOnScrollListener(scrollListener);
 
         return view;
     }
 
-    private AbsListView.OnScrollListener scrollListener = new AbsListView.OnScrollListener() {
+    private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-        }
-
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//            Log.d("androidxx", "firstVisibleItem: "+firstVisibleItem + "<---->  visibleItemCount:"+visibleItemCount+"   <--->totalItemCount:"+totalItemCount);
-//            Log.d("androidxx", "onScroll: view:"+view.getChildCount());
-            int num = 0;
-            for (int i = 0; i < keyList.size()-1; i++) {
-                String key = keyList.get(i);
-                num = dataMap.get(key).size() + num ;
-                int after = num + dataMap.get(keyList.get(i+1)).size();
-                if ( after > firstVisibleItem -i &&firstVisibleItem - i  >= num ){
-                    mTimeTxt.setText(getSubResult(key));
-                }
-            }
-        }
-    };
-
-
-    private ExpandableListView.OnChildClickListener childClickListener = new ExpandableListView.OnChildClickListener() {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            MgzInfoBean mgzInfoBean = dataMap.get(keyList.get(groupPosition)).get(childPosition);
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            MgzInfoBean mgzInfoBean = mgzInfoBeenList.get(position);
             Intent intent = new Intent(mContext, WebActivity.class);
             intent.putExtra("url",mgzInfoBean.getTopic_url());
             intent.putExtra("name",mgzInfoBean.getTopic_name());
             startActivity(intent);
-            return false;
         }
     };
 
 
     @Override
     public void successJson(String result, int requestCode) {
-        if (requestCode == 42){
+        if (requestCode == 50){
             Gson gson = new Gson();
             List<String> keys = gson.fromJson(result, MgzBean.class).getData().getItems().getKeys();
             keyList.addAll(keys);
-            mTimeTxt.setText(getSubResult(keyList.get(0)));
             try {
                 JSONObject object = new JSONObject(result);
                 JSONObject data = object.getJSONObject("data");
                 JSONObject item = data.getJSONObject("items");
                 JSONObject infos = item.getJSONObject("infos");
                 for (int i = 0; i < keyList.size(); i++) {
-                    List<MgzInfoBean> mgzInfoBeenList = new ArrayList<>();
                     String key = keyList.get(i);
                     JSONArray jsonArray = infos.getJSONArray(key);
                     for (int j = 0; j < jsonArray.length(); j++) {
@@ -171,85 +156,34 @@ public class MagazineFragment extends Fragment implements JsonCallBack {
                         MgzInfoBean mgzInfoBean = new MgzInfoBean(taid, topic_name, cat_id, author_id, topic_url, access_url, cover_img, cover_img_new, hit_number, addtime, content, nav_title, author_name, cat_name);
                         mgzInfoBeenList.add(mgzInfoBean);
                     }
-                    dataMap.put(key,mgzInfoBeenList);
                 }
 
-                mAdapter.notifyDataSetChanged();
+                myAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
-
-
-    class MyAdapter extends BaseExpandableListAdapter{
+    class MyAdapter extends BaseAdapter{
 
         @Override
-        public int getGroupCount() {
-            return keyList == null ? 0:keyList.size();
+        public int getCount() {
+            return mgzInfoBeenList == null ? 0:mgzInfoBeenList.size();
         }
 
         @Override
-        public int getChildrenCount(int groupPosition) {
-            String key = keyList.get(groupPosition);
-            List<MgzInfoBean> mgzInfoBeen = dataMap.get(key);
-            return mgzInfoBeen.size();
+        public Object getItem(int position) {
+            return null;
         }
 
         @Override
-        public Object getGroup(int groupPosition) {
-            return keyList.get(groupPosition);
-        }
-
-        @Override
-        public Object getChild(int groupPosition, int childPosition) {
-            String key = keyList.get(groupPosition);
-            List<MgzInfoBean> mgzInfoBeen = dataMap.get(key);
-            return mgzInfoBeen.get(childPosition);
-        }
-
-        @Override
-        public long getGroupId(int groupPosition) {
+        public long getItemId(int position) {
             return 0;
         }
 
         @Override
-        public long getChildId(int groupPosition, int childPosition) {
-            return 0;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            FatherViewHodler viewHodler;
-            if (convertView == null){
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.magazine_item_father, parent, false);
-                viewHodler = new FatherViewHodler(convertView);
-            }else {
-                viewHodler = (FatherViewHodler) convertView.getTag();
-            }
-            viewHodler.timeTxt.setText(getSubResult(keyList.get(groupPosition)));
-            mExpandableList.expandGroup(groupPosition);
-            return convertView;
-        }
-
-        class FatherViewHodler {
-            public TextView timeTxt;
-
-            public FatherViewHodler(View view) {
-                view.setTag(this);
-                timeTxt = (TextView) view.findViewById(R.id.mgz_item_text);
-            }
-        }
-
-        @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             ChildViewHodler viewHodler;
             if (convertView == null){
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.magazine_item_child,parent,false);
@@ -257,12 +191,13 @@ public class MagazineFragment extends Fragment implements JsonCallBack {
             }else {
                 viewHodler = (ChildViewHodler) convertView.getTag();
             }
-            MgzInfoBean mgzInfoBean = dataMap.get(keyList.get(groupPosition)).get(childPosition);
+            MgzInfoBean mgzInfoBean = mgzInfoBeenList.get(position);
             viewHodler.categoryTxt.setText(mgzInfoBean.getCat_name());
             viewHodler.descTxt.setText(mgzInfoBean.getTopic_name());
             Glide.with(mContext).load(mgzInfoBean.getCover_img_new()).into(viewHodler.iconImg);
             return convertView;
         }
+
 
         class ChildViewHodler{
             public TextView descTxt;
@@ -276,16 +211,5 @@ public class MagazineFragment extends Fragment implements JsonCallBack {
                 categoryTxt = (TextView) view.findViewById(R.id.mgz_item_category_txt);
             }
         }
-
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition) {
-            return true;
-        }
-    }
-
-
-    private String getSubResult(String string){
-        String substring = string.substring(5);
-        return substring;
     }
 }
