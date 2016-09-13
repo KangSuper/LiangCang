@@ -13,4 +13,6 @@
     <color name="colorButton">#CCCCCC</color>
     <color name="colorGery" >#6E7479</color>
     <color name="colorGery1">#48494B</color>
+    <color name="colorTalent">#444950</color>
+    <color name="colorTalentMenu">#313335</color>
 </resources>

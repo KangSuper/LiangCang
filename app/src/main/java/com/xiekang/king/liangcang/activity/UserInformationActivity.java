@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
@@ -28,6 +29,7 @@ import com.xiekang.king.liangcang.UserInfo_Fragment.UseFollowFragment;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserFansFragment;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserInfo;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserLikeFragment;
+import com.xiekang.king.liangcang.UserInfo_Fragment.UserLikePull;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserRecommendFragment;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollow;
 import com.xiekang.king.liangcang.bean.UserInfo.UserLikeAndRecommendBean;
@@ -65,14 +67,16 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
+
+      //  userInfo = new UserLikeFragment(id,page);
         supportActionBar = getSupportActionBar();
         supportActionBar.hide();
         context = this;
         fragmentManager = getSupportFragmentManager();
         id = getIntent().getExtras().getString("id");
         initview();
-
-
+        new UserLikePull(this).getPull(id);
+        user_like.setChecked(true);
     }
 
     private void initdata() {
@@ -83,7 +87,7 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
         ButterKnife.bind(this);
 
         refreshScrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-       user_like.setChecked(true);
+
         //填充数据
         initdata();
 
@@ -144,7 +148,7 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
 
                 refreshView.getLoadingLayoutProxy()
                         .setLastUpdatedLabel("最后更新 "+label);
-                HttpUtils.load(GetUrl.getUserLike(id,1)).callBack(UserInformationActivity.this,1);
+                HttpUtils.load(GetUrl.getUserLike(id,1)).callBack(UserInformationActivity.this,2);
                 userInfo.successUse(page);
             }
 
@@ -173,7 +177,29 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
             user_recommend.setText("推荐\n"+items.getRecommendation_count());
             user_focus.setText("关注\n"+items.getFollowing_count());
             user_fans.setText("粉丝\n"+items.getFollowed_count());
+
+//           userInfo.successUse(page);
+        }
+        if (requestCode ==2){
+            Gson gson = new Gson();
+            UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
+            server_time = bean.getMeta().getServer_time();
+            UserLikeAndRecommendBean.DataBean.ItemsBean items = bean.getData().getItems();
+            name = items.getUser_name();
+            String orig = items.getUser_image().getOrig();
+            String user_desc = items.getUser_desc();
+            user_job.setText(user_desc);
+            user_name.setText(name);
+            use_title.setText(name);
+            Picasso.with(this).load(orig).into(head_img);
+            user_like.setText("喜欢\n"+items.getLike_count());
+            user_recommend.setText("推荐\n"+items.getRecommendation_count());
+            user_focus.setText("关注\n"+items.getFollowing_count());
+            user_fans.setText("粉丝\n"+items.getFollowed_count());
+
+            refreshScrollView.onRefreshComplete();
         }
     }
-
 }
+
+

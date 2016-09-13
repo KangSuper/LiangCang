@@ -17,14 +17,16 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.bean.UserInfo.UserFans;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollow;
-import com.xiekang.king.liangcang.bean.UserInfo.UserFollowAndFollowedsBean;
+
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  * Created by Administrator on 2016/9/12.
@@ -135,8 +137,8 @@ public class UserFansFragment extends Fragment implements JsonCallBack,UserInfo 
     public void successJson(String result, int requestCode) {
         if (requestCode==1){
             Gson gson = new Gson();
-            UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
-            List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
+            UserFans bean = gson.fromJson(result, UserFans.class);
+            List<UserFans.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
 
             for (int i = 0; i < users.size(); i++) {
                 UserFollow userFollow = new UserFollow();
@@ -151,8 +153,8 @@ public class UserFansFragment extends Fragment implements JsonCallBack,UserInfo 
         }
         if (requestCode==2){
             Gson gson = new Gson();
-            UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
-            List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
+            UserFans bean = gson.fromJson(result, UserFans.class);
+            List<UserFans.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
 
             for (int i = 0; i < users.size(); i++) {
                 UserFollow userFollow = new UserFollow();
@@ -164,6 +166,7 @@ public class UserFansFragment extends Fragment implements JsonCallBack,UserInfo 
                 //刷新适配器
                 myadapter3.notifyDataSetChanged();
             }
+            refreshGridView.onRefreshComplete();
         }
     }
     @Override

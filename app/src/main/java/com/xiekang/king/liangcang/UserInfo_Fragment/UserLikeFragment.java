@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,11 @@ import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,9 +41,13 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
     public int page;
     private PullToRefreshGridView refreshGridView;
     private GridView gridview;
-    private LinkedList<UserLike>mlist = new LinkedList<>();
+  // private LinkedList<UserLike>mlist = new LinkedList<>();
+
     private Myadapter1 myadapter1;
     public String id;
+    private String TAG = "androidhello";
+    private List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods;
+
     public UserLikeFragment(String id,int page){
         this.id= id;
         this.page = page;
@@ -53,6 +63,7 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.userinfo_fragment,container,false);
         url = GetUrl.getUserLike(id,page);
+        Log.d(TAG, "onCreateView: "+url);
         myadapter1 = new Myadapter1();
         initview(view);
         gridview.setAdapter(myadapter1);
@@ -89,7 +100,9 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
 
         @Override
         public int getCount() {
-            return mlist.size();
+            Log.d(TAG, "getCount: "+(goods==null?0:goods.size()));
+            return goods==null?0:goods.size();
+
         }
 
         @Override
@@ -113,8 +126,11 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
             }else {
                 viewHolderUser = (ViewHolderUser) view.getTag();
             }
-            UserLike userLike = mlist.get(position);
-            Picasso.with(context).load(userLike.img).into(viewHolderUser.imageView);
+           // UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean goodsBean = goods.get(position);
+            Log.d(TAG, "position: "+position);
+
+            Log.d(TAG, "getView: "+goods.get(position).getGoods_image());
+            Picasso.with(context).load(goods.get(position).getGoods_image()).into(viewHolderUser.imageView);
 
             return view;
         }
@@ -126,40 +142,39 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
             imageView = (ImageView) view.findViewById(R.id.use_like_item_img);
         }
     }
+    private  JSONArray jsonArray;
+    private List<String>list = new ArrayList<>();
     @Override
     public void successJson(String result, int requestCode) {
         if (requestCode==1){
             Gson gson = new Gson();
             UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
-            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods = bean.getData().getItems().getGoods();
-            for (int i = 0; i < goods.size(); i++) {
-                UserLike userLike = new UserLike();
-                userLike.id = goods.get(i).getGoods_id();
-                userLike.img = goods.get(i).getGoods_image();
-                mlist.add(userLike);
-                //刷新适配器
-                myadapter1.notifyDataSetChanged();
-            }
+            goods = bean.getData().getItems().getGoods();
+           //  Log.d(TAG, "successJson: "+goods);
+           myadapter1.notifyDataSetChanged();
         }
-        if (requestCode==2){
+        if (requestCode == 2){
             Gson gson = new Gson();
             UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
-            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods = bean.getData().getItems().getGoods();
-            for (int i = 0; i < goods.size(); i++) {
-                UserLike userLike = new UserLike();
-                userLike.id = goods.get(i).getGoods_id();
-                userLike.img = goods.get(i).getGoods_image();
-                mlist.addLast(userLike);
-                //刷新适配器
-                myadapter1.notifyDataSetChanged();
-            }
+            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods2 = bean.getData().getItems().getGoods();
+            goods.addAll(goods2);
+            myadapter1.notifyDataSetChanged();
+            refreshGridView.onRefreshComplete();
+        }
+        if (requestCode == 3){
+            Gson gson = new Gson();
+            UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
+            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods3 = bean.getData().getItems().getGoods();
+            goods = goods3;
+            myadapter1.notifyDataSetChanged();
+            refreshGridView.onRefreshComplete();
         }
     }
     @Override
     public void successUse(int page) {
         this.page = 1;
         url = GetUrl.getUserLike(id,page);
-        HttpUtils.load(url).callBack(this,page);
+        HttpUtils.load(url).callBack(this,3);
     }
 
 }

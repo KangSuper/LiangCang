@@ -169,21 +169,21 @@ public class GetUrl {
     //喜欢
     public static String getUserLike(String id,int page){
         return " http://mobile.iliangcang.com" +
-                "/user/masterLike?app_key=Android&count=10&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0&owner_id="+id+"&page="+page;
+                "/user/masterLike?app_key=Android&count=10&sig=5693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0&owner_id="+id+"&page="+page;
     }
     //推荐
     public static String getUserTuijian(String id,int page){
         return "  http://mobile.iliangcang.com" +
-                "/user/masterListInfo?app_key=Android&count=10&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+                "/user/masterListInfo?app_key=Android&count=10&owner_id="+id+"&page="+page+"&sig=6D569445693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0";
     }
     //关注
     public static String getUserFollow(String id,int page){
         return "http://mobile.iliangcang.com" +
-                "/user/masterFollow?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+                "/user/masterFollow?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=5693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0";
     }
     //粉丝
     public static String getUserFans(String id,int page){
         return "http://mobile.iliangcang.com" +
-                "/user/masterFollowed?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
+                "/user/masterFollowed?app_key=Android&count=12&owner_id="+id+"&page="+page+"&sig=5693B044D5F961D25489767100FA6553%7C731720001493468&v=1.0";
     }
 }

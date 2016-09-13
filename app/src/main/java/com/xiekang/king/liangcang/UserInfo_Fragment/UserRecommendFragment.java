@@ -154,6 +154,7 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack,User
                 //刷新适配器
                 myadapter2.notifyDataSetChanged();
             }
+            refreshGridView.onRefreshComplete();
         }
     }
     @Override
