@@ -11,4 +11,6 @@
     <color name="colorBule">#398DEE</color>
     <color name="colorBlue2">#6E96C1</color>
     <color name="colorButton">#CCCCCC</color>
+    <color name="colorGery" >#6E7479</color>
+    <color name="colorGery1">#48494B</color>
 </resources>
