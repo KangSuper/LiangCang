@@ -142,8 +142,6 @@ public class UserLikeFragment extends Fragment implements JsonCallBack,UserInfo{
             imageView = (ImageView) view.findViewById(R.id.use_like_item_img);
         }
     }
-    private  JSONArray jsonArray;
-    private List<String>list = new ArrayList<>();
     @Override
     public void successJson(String result, int requestCode) {
         if (requestCode==1){
