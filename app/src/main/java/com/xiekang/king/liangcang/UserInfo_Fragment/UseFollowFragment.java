@@ -2,9 +2,10 @@ package com.xiekang.king.liangcang.UserInfo_Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,33 +19,41 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.bean.UserInfo.UserFollow;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollowAndFollowedsBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
+import com.xiekang.king.liangcang.utils.DateUtils;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/9/12.
  */
-public class UseFollowFragment extends Fragment implements JsonCallBack, UserInfo {
+public class UseFollowFragment extends Fragment implements JsonCallBack{
     private Context context;
     public String url;
-    public int page;
+    public int page = 1;
     private PullToRefreshGridView refreshGridView;
     private GridView gridview;
-    private LinkedList<UserFollow> mlist = new LinkedList<>();
+    private List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> usersBeanList = new ArrayList<>();
     private Myadapter3 myadapter3;
     public String id;
-    private String TAG = "androidxxx";
 
-    public UseFollowFragment(String id, int page) {
+    public UseFollowFragment(String id) {
         this.id = id;
-        this.page = page;
     }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            myadapter3.notifyDataSetChanged();
+            refreshGridView.setLastUpdatedLabel("最后更新:" + DateUtils.getCurrentTime());
+            refreshGridView.onRefreshComplete();
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +74,8 @@ public class UseFollowFragment extends Fragment implements JsonCallBack, UserInf
         myadapter3 = new Myadapter3();
         initview(view);
         gridview.setAdapter(myadapter3);
+        gridview.setVerticalSpacing(10);
+        gridview.setHorizontalSpacing(10);
         return view;
     }
 
@@ -82,8 +93,16 @@ public class UseFollowFragment extends Fragment implements JsonCallBack, UserInf
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 page++;
-                url = GetUrl.getUserFollow(id, page);
-                HttpUtils.load(url).callBack(UseFollowFragment.this, 51);
+                HttpUtils.load(GetUrl.getUserFollow(id, page)).callBack(new JsonCallBack() {
+                    @Override
+                    public void successJson(String result, int requestCode) {
+                        Gson gson = new Gson();
+                        UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
+                        List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
+                        usersBeanList.addAll(users);
+                        mHandler.sendEmptyMessage(1);
+                    }
+                },51);
             }
         });
     }
@@ -97,7 +116,7 @@ public class UseFollowFragment extends Fragment implements JsonCallBack, UserInf
 
         @Override
         public int getCount() {
-            return mlist == null ? 0 : mlist.size();
+            return usersBeanList == null ? 0 : usersBeanList.size();
         }
 
         @Override
@@ -121,13 +140,10 @@ public class UseFollowFragment extends Fragment implements JsonCallBack, UserInf
             } else {
                 viewHolderUser = (ViewHolderUser) view.getTag();
             }
-            UserFollow userFollow = mlist.get(position);
-            Log.d(TAG, "getView: "+userFollow.img);
-            Log.d(TAG, "getView: "+userFollow.name);
-            Log.d(TAG, "getView: "+userFollow.job);
-            Picasso.with(context).load(userFollow.img).into(viewHolderUser.imageView);
-            viewHolderUser.name.setText(userFollow.name);
-            viewHolderUser.job.setText(userFollow.job);
+            UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean usersBean = usersBeanList.get(position);
+            Picasso.with(context).load(usersBean.getUser_image().getOrig()).into(viewHolderUser.imageView);
+            viewHolderUser.name.setText(usersBean.getUser_name());
+            viewHolderUser.job.setText(usersBean.getUser_desc());
             return view;
         }
     }
@@ -150,40 +166,11 @@ public class UseFollowFragment extends Fragment implements JsonCallBack, UserInf
             Gson gson = new Gson();
             UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
             List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
-
-            for (int i = 0; i < users.size(); i++) {
-                UserFollow userFollow = new UserFollow();
-                userFollow.id = users.get(i).getUser_id();
-                userFollow.img = users.get(i).getUser_image().getMid();
-                userFollow.job = users.get(i).getUser_desc();
-                userFollow.name = users.get(i).getUser_name();
-                mlist.add(userFollow);
-                //刷新适配器
-            }
+            usersBeanList.addAll(users);
             myadapter3.notifyDataSetChanged();
-        } else if (requestCode == 51) {
-            Gson gson = new Gson();
-            UserFollowAndFollowedsBean bean = gson.fromJson(result, UserFollowAndFollowedsBean.class);
-            List<UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean> users = bean.getData().getItems().getUsers();
 
-            for (int i = 0; i < users.size(); i++) {
-                UserFollow userFollow = new UserFollow();
-                userFollow.id = users.get(i).getUser_id();
-                userFollow.img = users.get(i).getUser_image().getMid();
-                userFollow.job = users.get(i).getUser_desc();
-                userFollow.name = users.get(i).getUser_name();
-                mlist.addLast(userFollow);
-            }
-            //刷新适配器
-            myadapter3.notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void successUse(int page) {
-        this.page = 1;
-        url = GetUrl.getUserFollow(id, page);
-        HttpUtils.load(url).callBack(this, page);
-    }
 
 }

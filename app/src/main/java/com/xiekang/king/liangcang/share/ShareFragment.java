@@ -21,6 +21,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -54,6 +55,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     private Button search_bt;
     private MenuAdapter menuAdapter;
     private String url;
+    private RelativeLayout mRelative;
 
     public static ShareFragment newInstance() {
         ShareFragment fragment = new ShareFragment();
@@ -83,6 +85,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         initmenudata();
         search_bt = (Button) view.findViewById(R.id.share_search);
         set_bt = (Button) view.findViewById(R.id.share_set);
+        mRelative = (RelativeLayout) view.findViewById(R.id.re);
         set_bt.setOnClickListener(this);
         search_bt.setOnClickListener(this);
         view_menu = LayoutInflater.from(mContext).inflate(R.layout.share_menu, null);
@@ -190,7 +193,6 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
 
                             count++;
                             if (count % 2 != 0) {
-                                //Toast.makeText(MainActivity.this, "ggg", Toast.LENGTH_SHORT).show();
                                 mainlist.addAll(mlist);
                                 menuAdapter.notifyDataSetChanged();
                             } else {
@@ -210,7 +212,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                     }
                 });
                 popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.colorWhite));
-                popupWindow.showAsDropDown(view);
+                popupWindow.showAsDropDown(mRelative);
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {

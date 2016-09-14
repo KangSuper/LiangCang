@@ -134,8 +134,10 @@ public class GetUrl {
     }
 
     //搜索
-    public static String getTalentSearchUrl(int page) {
-        return "http://mobile.iliangcang.com/user/search?app_key=Android&count=18&keyword=11&page=" +
+    public static String getTalentSearchUrl(String keyWord,int page) {
+        return "http://mobile.iliangcang.com/user/search?app_key=Android&count=18&keyword=" +
+                keyWord +
+                "&page=" +
                 page +
                 "&sig=6D569443F5A6EB51036D09737946AC2A%7C002841520425331&v=1.0";
     }

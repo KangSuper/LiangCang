@@ -18,7 +18,6 @@ public class DrawableVerticalButton extends Button {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas = getTopCanvas(canvas);
-
         super.onDraw(canvas);
     }
 

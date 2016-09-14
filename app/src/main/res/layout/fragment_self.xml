@@ -1,130 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.myapplication.PersonalActivity">
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1">
 
-        >
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_self_fragment"/>
+            android:background="@drawable/bg_self_fragment"
+            android:alpha="0.5"/>
+
         <ImageView
             android:id="@+id/personal_img"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/ic_self_avatar"
-            android:layout_marginTop="27dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_self_avatar" />
+
         <TextView
             android:id="@+id/personal_load"
             android:layout_width="70dp"
             android:layout_height="30dp"
+            android:layout_below="@+id/personal_img"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorBule"
             android:gravity="center"
             android:text="登录/注册"
-            android:textSize="12sp"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorBule"
-            android:layout_above="@+id/linearLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
+            android:textSize="12sp" />
+
         <LinearLayout
-            android:layout_alignParentBottom="true"
-            android:padding="10dp"
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:id="@+id/linearLayout">
+            android:padding="5dp">
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:id="@+id/personal_order"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_self_cart"
                 android:text="我的订单"
                 android:gravity="center"
-                android:layout_marginRight="10dp"
-                android:drawableLeft="@drawable/ic_self_cart"/>
+                android:background="@drawable/shape_self_txt"
+                android:textColor="@color/colorWhite"/>
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:id="@+id/personal_redpacket"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_self_bonus"
+                android:gravity="center"
                 android:text="我的红包"
-               android:gravity="center"
-                android:drawableLeft="@drawable/ic_self_bonus"/>
+                android:background="@drawable/shape_self_txt"
+                android:textColor="@color/colorWhite"/>
         </LinearLayout>
     </RelativeLayout>
-    <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="2"
-    >
-        <Button
-            android:id="@+id/personal_wish"
-            android:background="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="我的心愿单"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:drawableTop="@drawable/ic_my_wish"
-            android:layout_marginTop="83dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="62dp"
-            android:layout_marginStart="62dp" />
-        <Button
-            android:id="@+id/personal_msg"
-            android:background="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="我的消息"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:drawableTop="@drawable/ic_my_msg"
-            android:layout_alignTop="@+id/personal_wish"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="68dp"
-            android:layout_marginEnd="68dp" />
 
-        <Button
-            android:id="@+id/personal_address"
-            android:background="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="地址管理"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:drawableTop="@drawable/ic_addr_manage"
-            android:layout_alignTop="@+id/personal_custom"
-            android:layout_alignLeft="@+id/personal_wish"
-            android:layout_alignStart="@+id/personal_wish" />
-        <Button
-            android:id="@+id/personal_custom"
-            android:background="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginBottom="1dp">
+            <com.xiekang.king.liangcang.customView.DrawableVerticalButton
+                android:id="@+id/personal_wish"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:drawableTop="@drawable/ic_my_wish"
+                android:text="我的心愿单"
+                android:textColor="@color/colorBlank"
+                android:textSize="12sp"
+                android:layout_marginRight="1dp"/>
 
-            android:text="良仓客服"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:drawableTop="@drawable/ic_custom_service"
-            android:layout_below="@+id/personal_msg"
-            android:layout_alignLeft="@+id/personal_msg"
-            android:layout_alignStart="@+id/personal_msg"
-            android:layout_marginTop="82dp" />
-  </RelativeLayout>
+            <com.xiekang.king.liangcang.customView.DrawableVerticalButton
+                android:id="@+id/personal_msg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:drawableTop="@drawable/ic_my_msg"
+                android:textColor="@color/colorBlank"
+                android:text="我的消息"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <com.xiekang.king.liangcang.customView.DrawableVerticalButton
+                android:id="@+id/personal_address"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:drawableTop="@drawable/ic_addr_manage"
+                android:text="地址管理"
+                android:textColor="@color/colorBlank"
+                android:textSize="12sp"
+                android:layout_marginRight="1dp"/>
+
+            <com.xiekang.king.liangcang.customView.DrawableVerticalButton
+                android:id="@+id/personal_custom"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorWhite"
+                android:drawableTop="@drawable/ic_custom_service"
+                android:textColor="@color/colorBlank"
+                android:text="良仓客服"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 </LinearLayout>

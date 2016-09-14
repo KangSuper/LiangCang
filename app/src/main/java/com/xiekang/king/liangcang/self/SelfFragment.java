@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.xiekang.king.liangcang.R;
+
 
 public class SelfFragment extends Fragment {
     private Context mContext;
@@ -28,8 +30,7 @@ public class SelfFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView textView = new TextView(mContext);
-        textView.setText("我的");
-        return textView;
+        View view = inflater.inflate(R.layout.fragment_self, container, false);
+        return view;
     }
 }

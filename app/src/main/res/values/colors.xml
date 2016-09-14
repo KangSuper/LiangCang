@@ -18,5 +18,6 @@
     <color name="colorGary1">#dae0e6</color>
     <color name="colorTalent">#444950</color>
     <color name="colorTalentMenu">#313335</color>
+    <color name="colorGirdView">#1E2125</color>
 
 </resources>

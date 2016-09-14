@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.text.Layout;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,14 +25,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.UserInfo_Fragment.UserInfo;
 import com.xiekang.king.liangcang.activity.UserInformationActivity;
+import com.xiekang.king.liangcang.activity.UserSearchActivity;
 import com.xiekang.king.liangcang.bean.talent.Talent;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -254,6 +251,8 @@ public class TalentFragment extends Fragment implements JsonCallBack,View.OnClic
     public void onClick(View view){
         switch (view.getId()){
             case R.id.talent_search:
+                Intent intent = new Intent(mContext, UserSearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.talent_set:
                 menu.setBackgroundResource(R.drawable.close);
