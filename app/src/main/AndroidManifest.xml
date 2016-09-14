@@ -32,8 +32,6 @@
         <activity
             android:name=".activity.ProductSearchActivity"
             android:configChanges="orientation|keyboardHidden" />
-        <activity android:name=".activity.ShopInfoActivity" />
-        <activity android:name=".activity.GoodsActivity"></activity>
     </application>
 
 </manifest>
