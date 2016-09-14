@@ -83,6 +83,32 @@
                     android:textColor="@color/colorBlue3"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/shop_info_mian"
+                    android:layout_alignTop="@id/shop_info_price"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorText"
+                    android:textSize="7sp"
+                    android:text="免运费 正版授权"/>
+                <RelativeLayout
+                    android:id="@+id/shop_info_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/shop1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ease_dx_checkbox_gray_on"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="10sp"
+                        android:layout_marginLeft="5dp"
+                        android:text="选择 尺寸 颜色 数量"/>
+                </RelativeLayout>
             </RelativeLayout>
 
         </RelativeLayout>
