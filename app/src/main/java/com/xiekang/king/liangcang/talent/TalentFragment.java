@@ -305,6 +305,8 @@ public class TalentFragment extends Fragment implements JsonCallBack,View.OnClic
                 break;
         }
     }
+
+
     class MyMenuAdapter extends BaseAdapter{
 
         @Override
