@@ -8,19 +8,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
 import android.support.v7.app.ActionBar;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import android.widget.BaseAdapter;
 import android.widget.Button;
-
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,8 +31,6 @@ import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
 import com.xiekang.king.liangcang.bean.Share.Share_conver;
 import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
-import com.xiekang.king.liangcang.share.Http.HttpService;
-import com.xiekang.king.liangcang.share.Impl.ShareImpl;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
@@ -46,7 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class ShareFragment extends Fragment implements View.OnClickListener,JsonCallBack{
+public class ShareFragment extends Fragment implements View.OnClickListener, JsonCallBack {
     private Context mContext;
     private int count = 0;
     private Button set_bt;
@@ -55,12 +49,12 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
     private List<String> mlist = new ArrayList<>();
     private ListView listview;
 
-    private String TAG = "androidxx";
-    private List<String>list = new ArrayList<>();
-    private List<String>mainlist = new ArrayList<>();
+    private List<String> list = new ArrayList<>();
+    private List<String> mainlist = new ArrayList<>();
     private Button search_bt;
     private MenuAdapter menuAdapter;
     private String url;
+
     public static ShareFragment newInstance() {
         ShareFragment fragment = new ShareFragment();
         return fragment;
@@ -75,7 +69,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_share,container,false);
+        View view = inflater.inflate(R.layout.fragment_share, container, false);
         url = GetUrl.getShareAllUrl(page);
         initview(view);
         myadapter = new Myadapter();
@@ -84,16 +78,15 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
         gridview.setAdapter(myadapter);
         return view;
     }
+
     private void initview(View view) {
         initmenudata();
-        search_bt = (Button)view.findViewById(R.id.share_search);
-        set_bt = (Button)view.findViewById(R.id.share_set);
+        search_bt = (Button) view.findViewById(R.id.share_search);
+        set_bt = (Button) view.findViewById(R.id.share_set);
         set_bt.setOnClickListener(this);
         search_bt.setOnClickListener(this);
-        Log.d(TAG, "initview: "+set_bt);
-        //view_category = getLayoutInflater().inflate(R.layout.share_menu_category,null);
-        view_menu = LayoutInflater.from(mContext).inflate(R.layout.share_menu,null);
-        popupWindow = new PopupWindow(view_menu, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT,true);
+        view_menu = LayoutInflater.from(mContext).inflate(R.layout.share_menu, null);
+        popupWindow = new PopupWindow(view_menu, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
     }
 
     private void initmenudata() {
@@ -117,9 +110,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
     }
 
 
-
-
-    class MenuAdapter extends BaseAdapter{
+    class MenuAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -140,37 +131,34 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
         public View getView(final int position, View convertView, final ViewGroup parent) {
             View view = convertView;
             MenuViewholder viewholder;
-            if (view==null){
-                view = LayoutInflater.from(mContext).inflate(R.layout.share_menu_item,parent,false);
+            if (view == null) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.share_menu_item, parent, false);
                 viewholder = new MenuViewholder(view);
-            }else {
+            } else {
                 viewholder = (MenuViewholder) view.getTag();
             }
             viewholder.textview.setText(mainlist.get(position));
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
             return view;
         }
     }
-    class MenuViewholder{
+
+    class MenuViewholder {
         TextView textview;
-        public MenuViewholder(View view){
+
+        public MenuViewholder(View view) {
             view.setTag(this);
             textview = (TextView) view.findViewById(R.id.share_menu_item_tv);
         }
     }
-    public void onClick(View view){
-        switch (view.getId()){
+
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.share_search:
 
                 break;
             case R.id.share_set:
                 mainlist = list;
-                listview = (ListView)view_menu.findViewById(R.id.menu_category_listview);
+                listview = (ListView) view_menu.findViewById(R.id.menu_category_listview);
                 menuAdapter = new MenuAdapter();
 
                 listview.setAdapter(menuAdapter);
@@ -179,36 +167,34 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                         mPosition = position;
-                        if(position==0){
+                        if (position == 0) {
                             page = 1;
                             url = GetUrl.getShareAllUrl(page);
-                            HttpUtils.load(url).callBack(ShareFragment.this,4);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
                             popupWindow.dismiss();
 
-                        }
-                        else if(position ==1){
-                            page =1;
+                        } else if (position == 1) {
+                            page = 1;
                             url = GetUrl.getShareShopUrl(page);
-                            HttpUtils.load(url).callBack(ShareFragment.this,4);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                            popupWindow.dismiss();
+
+                        } else if (position > 2) {
+                            page = 1;
+                            url = GetUrl.getShareCategoryUrl(position - 2, page);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
                             popupWindow.dismiss();
 
                         }
-                        else if(position>2){
-                            page=1;
-                            url=GetUrl.getShareCategoryUrl(position-2,page);
-                            HttpUtils.load(url).callBack(ShareFragment.this,4);
-                            popupWindow.dismiss();
-
-                        }
-                        if (position==2){
+                        if (position == 2) {
 
                             count++;
-                            if (count%2!=0){
+                            if (count % 2 != 0) {
                                 //Toast.makeText(MainActivity.this, "ggg", Toast.LENGTH_SHORT).show();
                                 mainlist.addAll(mlist);
                                 menuAdapter.notifyDataSetChanged();
-                            }else {
-                                mainlist .removeAll(mlist);
+                            } else {
+                                mainlist.removeAll(mlist);
                                 listview.setAdapter(menuAdapter);
                             }
                         }
@@ -243,7 +229,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
     private GridView gridview;
     private int page = 1;
     private Myadapter myadapter;
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -255,17 +241,17 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
     private void initdata() {
 
 
-        HttpUtils.load(url).callBack(ShareFragment.this,1);
+        HttpUtils.load(url).callBack(ShareFragment.this, 1);
     }
 
 
     private void initgridview(View view) {
-        refreshgrid = (PullToRefreshGridView)view.findViewById(R.id.share_pull_grid);
+        refreshgrid = (PullToRefreshGridView) view.findViewById(R.id.share_pull_grid);
         refreshgrid.setMode(PullToRefreshBase.Mode.BOTH);
         gridview = refreshgrid.getRefreshableView();
         gridview.setNumColumns(2);
-        gridview.setVerticalSpacing(15);
-        gridview.setHorizontalSpacing(15);
+        gridview.setVerticalSpacing(20);
+        gridview.setHorizontalSpacing(20);
         refreshgrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -277,14 +263,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
                                 | DateUtils.FORMAT_ABBREV_ALL);
 
                 refreshView.getLoadingLayoutProxy()
-                        .setLastUpdatedLabel("最后更新"+label);
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
+                        .setLastUpdatedLabel("最后更新" + label);
                 page = 1;
-                        HttpUtils.load(url).callBack(ShareFragment.this,4);
-//                    }
-//                }).start();
+                HttpUtils.load(url).callBack(ShareFragment.this, 4);
 
             }
 
@@ -292,35 +273,20 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("请稍后");
                 page++;
-                if (mPosition==0){
+                if (mPosition == 0) {
                     url = GetUrl.getShareAllUrl(page);
                 }
-                if (mPosition==1){
+                if (mPosition == 1) {
                     url = GetUrl.getShareShopUrl(page);
+                } else if (mPosition > 2) {
+                    url = GetUrl.getShareCategoryUrl(mPosition - 2, page);
                 }
-                else if (mPosition>2){
-                    url = GetUrl.getShareCategoryUrl(mPosition-2,page);
-                }
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
 
-                        HttpUtils.load(url).callBack(ShareFragment.this,2);
-//                    }
-//                }).start();
+                HttpUtils.load(url).callBack(ShareFragment.this, 2);
             }
         });
     }
 
-//    @Override
-//    public void (View v) {
-//
-//    }
-
-//    @Override
-//    public void success(ShareBean shareBean, int requestcode) {
-//
-//    }
 
     class Myadapter extends BaseAdapter {
 
@@ -342,42 +308,43 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
-            ViewHolder viewHolder ;
-            if (view==null){
-                view = LayoutInflater.from(mContext).inflate(R.layout.share_item,parent,false);
+            ViewHolder viewHolder;
+            if (view == null) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.share_item, parent, false);
                 viewHolder = new ViewHolder(view);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            Log.d(TAG, "getView: "+imglist.get(position));
             viewHolder.imageView.setImageResource(R.mipmap.ic_launcher);
             final Share_conver share_conver = imglist.get(position);
             Picasso.with(mContext).load(share_conver.img).into(viewHolder.imageView);
-            Log.d(TAG, "getView: "+viewHolder.imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, Goods_DetailActivity.class);
-                    intent.putExtra("id",share_conver.id);
+                    intent.putExtra("id", share_conver.id);
                     startActivity(intent);
                 }
             });
             return view;
         }
     }
-    class ViewHolder{
+
+    class ViewHolder {
         ImageView imageView;
-        public ViewHolder(View view ){
+
+        public ViewHolder(View view) {
             view.setTag(this);
             imageView = (ImageView) view.findViewById(R.id.share_item_img);
         }
 
-        }
+    }
+
     public void successJson(String result, int requestCode) {
         Gson gson = new Gson();
         ShareBean shareBean = gson.fromJson(result, ShareBean.class);
 
-        if (requestCode == 1){
+        if (requestCode == 1) {
 
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
@@ -389,7 +356,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             }
         }
         //上拉
-        if (requestCode ==2){
+        if (requestCode == 2) {
 
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
@@ -404,7 +371,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
             }
         }
         //下拉
-        if (requestCode == 4){
+        if (requestCode == 4) {
             LinkedList<Share_conver> headlist = new LinkedList<>();
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             for (int i = 0; i < items.size(); i++) {
@@ -413,49 +380,9 @@ public class ShareFragment extends Fragment implements View.OnClickListener,Json
                 String goods_id = items.get(i).getGoods_id();
                 Share_conver share_conver = new Share_conver(goods_image, goods_id);
                 headlist.addFirst(share_conver);
-               imglist = headlist;
+                imglist = headlist;
                 handler.sendEmptyMessage(1);
             }
         }
     }
-//        Override
-//    public void success(ShareBean shareBean, int requestcode) {
-//        if (requestcode == 1){
-//
-//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-//            for (int i = 0; i < items.size(); i++) {
-//                String goods_image = items.get(i).getGoods_image();
-//                String goods_id = items.get(i).getGoods_id();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-//                imglist.addFirst(share_conver);
-//                handler.sendEmptyMessage(1);
-//            }
-//        }
-//        if (requestcode ==2){
-//
-//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-//            for (int i = 0; i < items.size(); i++) {
-//
-//                String goods_image = items.get(i).getGoods_image();
-//                String goods_id = items.get(i).getGoods_id();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-//                imglist.addFirst(share_conver);
-//                //刷新
-//                // myadapter.notifyDataSetChanged();
-//                handler.sendEmptyMessage(1);
-//            }
-//        }
-//        if (requestcode == 4){
-//            LinkedList<String> headlist = new LinkedList<>();
-//            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-//            for (int i = 0; i < items.size(); i++) {
-//                String goods_image = items.get(i).getGoods_image();
-//                headlist.addFirst(goods_image);
-//                String goods_id = items.get(i).getGoods_id();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-//                imglist.addFirst(share_conver);
-//                handler.sendEmptyMessage(1);
-//            }
-//        }
-//    }
 }

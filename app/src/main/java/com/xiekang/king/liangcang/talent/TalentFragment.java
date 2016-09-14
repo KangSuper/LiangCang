@@ -40,7 +40,6 @@ public class TalentFragment extends Fragment implements JsonCallBack{
     private int page = 1;
     private List<Talent.DataBean.ItemsBean> items = new ArrayList<>();
     private MyadapterTalent myadapterTalent;
-    private String server_time;
 
     public static TalentFragment newInstance() {
         TalentFragment fragment = new TalentFragment();
@@ -184,15 +183,6 @@ public class TalentFragment extends Fragment implements JsonCallBack{
             List<Talent.DataBean.ItemsBean> items3 = talent.getData().getItems();
             items.addAll(items3);
             myadapterTalent.notifyDataSetChanged();
-        }
-    }
-    public void click(View view){
-        switch (view.getId()){
-            case R.id.talent_search:
-                break;
-            case R.id.talent_set:
-
-                break;
         }
     }
 }

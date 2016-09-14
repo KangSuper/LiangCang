@@ -16,4 +16,7 @@
     <color name="colorButton">#CCCCCC</color>
     <color name="colorGary">#e9ecf0</color>
     <color name="colorGary1">#dae0e6</color>
+    <color name="colorTalent">#444950</color>
+    <color name="colorTalentMenu">#313335</color>
+
 </resources>
