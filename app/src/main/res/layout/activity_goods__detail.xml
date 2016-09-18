@@ -117,6 +117,28 @@
                 android:gravity="center"
                 android:text="写点什么"
                 android:onClick="click"/>
+            <LinearLayout
+                android:id="@+id/share_detail_line11"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorText"
+                android:layout_below="@id/share_detail_loadcomment"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/share_detail_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="发送"
+                    android:background="@color/colorTranspant"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+                <EditText
+                    android:id="@+id/share_detail_edit"
+                    android:layout_width="match_parent"
+                    android:background="@color/colorWhite"
+                    android:textColor="@color/colorBlank"
+                    android:layout_height="50dp" />
+            </LinearLayout>
 
 
         </RelativeLayout>

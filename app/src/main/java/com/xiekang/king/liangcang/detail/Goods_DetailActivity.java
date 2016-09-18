@@ -16,9 +16,11 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -44,6 +46,9 @@ import butterknife.ButterKnife;
 
 public class Goods_DetailActivity extends Activity implements JsonCallBack,View.OnClickListener{
     @BindView(R.id.share_detail_link)Button link_bt;
+    @BindView(R.id.share_detail_write)Button write;
+    @BindView(R.id.share_detail_send)Button send;
+    @BindView(R.id.share_detail_line11)LinearLayout line11;
 
     @BindView(R.id.share_detail_img)ImageView img;
     @BindView(R.id.share_detail_goods_name)TextView goods_name;
@@ -92,8 +97,11 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
 
         //context = this;
         ButterKnife.bind(this);
+        line11.setVisibility(View.GONE);
+
         link_bt.setOnClickListener(this);
         loadcomment.setOnClickListener(this);
+        write.setOnClickListener(this);
 
         pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ScrollView refreshableView = pullscroview.getRefreshableView();
@@ -132,7 +140,7 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
         HttpUtils.load(GetUrl.getGoodsDetail(id)).callBack(this,1);
         HttpUtils.load(GetUrl.getGoodsComments(id,page)).callBack(this,2);
     }
-
+    //点击事件
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.share_detail_link){
@@ -142,6 +150,16 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
             startActivity(intent);
         }else if (v.getId()==R.id.share_detail_loadcomment){
 
+        }
+        if (v.getId()==R.id.share_detail_write){
+            write.setVisibility(View.GONE);
+            line11.setVisibility(View.VISIBLE);
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(Goods_DetailActivity.this, "发送", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
