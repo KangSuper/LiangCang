@@ -16,11 +16,9 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -43,6 +41,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 public class Goods_DetailActivity extends Activity implements JsonCallBack,View.OnClickListener{
     @BindView(R.id.share_detail_link)Button link_bt;
@@ -50,19 +50,31 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
     @BindView(R.id.share_detail_send)Button send;
     @BindView(R.id.share_detail_line11)LinearLayout line11;
 
-    @BindView(R.id.share_detail_img)ImageView img;
-    @BindView(R.id.share_detail_goods_name)TextView goods_name;
-    @BindView(R.id.share_detail_price)TextView goods_price;
-    @BindView(R.id.share_detail_like_count)TextView like_count;
-    @BindView(R.id.share_detail_owner)ImageView owner_img;
-    @BindView(R.id.share_detail_owner_name)TextView owner_name;
-    @BindView(R.id.share_detail_listview)ListView listView;
-    @BindView(R.id.share_detail_loadcomment)Button loadcomment;
-    @BindView(R.id.share_detail_pullscroll)PullToRefreshScrollView pullscroview;
+public class Goods_DetailActivity extends AppCompatActivity implements JsonCallBack, View.OnClickListener {
+    @BindView(R.id.share_detail_link)
+    Button link_bt;
+
+    @BindView(R.id.share_detail_img)
+    ImageView img;
+    @BindView(R.id.share_detail_goods_name)
+    TextView goods_name;
+    @BindView(R.id.share_detail_price)
+    TextView goods_price;
+    @BindView(R.id.share_detail_like_count)
+    TextView like_count;
+    @BindView(R.id.share_detail_owner)
+    ImageView owner_img;
+    @BindView(R.id.share_detail_owner_name)
+    TextView owner_name;
+    @BindView(R.id.share_detail_listview)
+    ListView listView;
+    @BindView(R.id.share_detail_loadcomment)
+    Button loadcomment;
     private String id;
     private String owner_id;
     private Context context = this;
-    private List<GoodsComments.DataBean.ItemsBean> items = new ArrayList<>();
+    private List<GoodsComments.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
+    private Good_DetailsBean.DataBean.ItemsBean itemsBean ;
     private Myadapter1 myadapter1;
     private int page = 1;
     private Handler handler = new Handler(){
@@ -88,14 +100,12 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserInformationActivity.class);
-                intent.putExtra("id",owner_id);
+                intent.putExtra("id", owner_id);
                 startActivity(intent);
             }
         });
     }
     private void initView() {
-
-        //context = this;
         ButterKnife.bind(this);
         line11.setVisibility(View.GONE);
 
@@ -106,39 +116,60 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
         pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ScrollView refreshableView = pullscroview.getRefreshableView();
         pullscroview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+        ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.hide();
+        ImageView backImg = (ImageView) findViewById(R.id.goods_header_back);
+        backImg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                String label = DateUtils.formatDateTime(
-                        context.getApplicationContext(),
-                        System.currentTimeMillis(),
-                        DateUtils.FORMAT_SHOW_TIME
-                                | DateUtils.FORMAT_SHOW_DATE
-                                | DateUtils.FORMAT_ABBREV_ALL);
-
-                refreshView.getLoadingLayoutProxy()
-                        .setLastUpdatedLabel("最后更新"+label);
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        HttpUtils.load(GetUrl.getGoodsComments(id,1)).callBack(Goods_DetailActivity.this,3);
-                        Looper.loop();
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-
+            public void onClick(View v) {
+                finish();
             }
         });
+        ImageView shareImg = (ImageView) findViewById(R.id.goods_header_share);
+        if (shareImg != null) {
+            shareImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ShareSDK.initSDK(Goods_DetailActivity.this);
+                    OnekeyShare oks = new OnekeyShare();
+                    //关闭sso授权
+                    oks.disableSSOWhenAuthorize();
+                    // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+                    //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+                    // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+//                    oks.setTitle("良仓");
+                    // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+//                    oks.setTitleUrl("http://sharesdk.cn");
+                    // text是分享文本，所有平台都需要这个字段
+                    oks.setText(itemsBean.getGoods_name());
+                    //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
+                    oks.setImageUrl(itemsBean.getGoods_image());
+                    // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+                    //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+                    // url仅在微信（包括好友和朋友圈）中使用
+                    oks.setUrl(itemsBean.getGoods_url());
+                    // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+//                    oks.setComment("");
+                    // site是分享此内容的网站名称，仅在QQ空间使用
+//                    oks.setSite("良仓");
+                    // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+//                    oks.setSiteUrl("http://sharesdk.cn");
+
+// 启动分享GUI
+                    oks.show(Goods_DetailActivity.this);
+                }
+            });
+        }
+
+        link_bt.setOnClickListener(this);
+
     }
+
     private void loaddata() {
         Intent intent = getIntent();
-        id =  intent.getExtras().getString("id");
-        HttpUtils.load(GetUrl.getGoodsDetail(id)).callBack(this,1);
-        HttpUtils.load(GetUrl.getGoodsComments(id,page)).callBack(this,2);
+        id = intent.getExtras().getString("id");
+        HttpUtils.load(GetUrl.getGoodsDetail(id)).callBack(this, 1);
+        HttpUtils.load(GetUrl.getGoodsComments(id, page)).callBack(this, 2);
     }
     //点击事件
     @Override
@@ -163,11 +194,11 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
         }
     }
 
-    class Myadapter1 extends BaseAdapter{
+    class Myadapter1 extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return items==null?0:items.size();
+            return itemsBeanList == null ? 0 : itemsBeanList.size();
         }
 
         @Override
@@ -182,36 +213,38 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-           View view = convertView;
+            View view = convertView;
             ViewHolder viewHolder;
-            if (view == null){
-                view = LayoutInflater.from(context).inflate(R.layout.goods_comment_lsit_item,parent,false);
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.goods_comment_lsit_item, parent, false);
                 viewHolder = new ViewHolder(view);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            final GoodsComments.DataBean.ItemsBean itemsBean = items.get(position);
+            final GoodsComments.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
             String user_image = itemsBean.getUser_image();
             Picasso.with(context).load(user_image).into(viewHolder.imageView);
-            viewHolder.content.setText(itemsBean.getUser_name()+":"+itemsBean.getMsg());
+            viewHolder.content.setText(itemsBean.getUser_name() + ":" + itemsBean.getMsg());
             viewHolder.time.setText(itemsBean.getCreate_time());
 
             viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String user_id = itemsBean.getUser_id()+"";
+                    String user_id = itemsBean.getUser_id() + "";
                     Intent intent = new Intent(context, UserInformationActivity.class);
-                    intent.putExtra("id",user_id);
+                    intent.putExtra("id", user_id);
                     startActivity(intent);
                 }
             });
             return view;
         }
     }
+
     class ViewHolder {
         ImageView imageView;
-        TextView content,time;
-        public ViewHolder(View view){
+        TextView content, time;
+
+        public ViewHolder(View view) {
             view.setTag(this);
             imageView = (ImageView) view.findViewById(R.id.goods_comment_head);
             content = (TextView) view.findViewById(R.id.goods_comment_content);
@@ -225,35 +258,26 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
     @Override
     public void successJson(String result, int requestCode) {
         //返回商品详情
-        if (requestCode==1){
-                Gson gson = new Gson();
+        if (requestCode == 1) {
+            Gson gson = new Gson();
             Good_DetailsBean good_detailsBean = gson.fromJson(result, Good_DetailsBean.class);
-            Good_DetailsBean.DataBean.ItemsBean items = good_detailsBean.getData().getItems();
-            Picasso.with(this).load(items.getGoods_image()).into(img);
-            name = items.getGoods_name();
-            goods_url = items.getGoods_url();
-
-            goods_name.setText(items.getGoods_name());
-            goods_price.setText("¥ "+items.getPrice());
-            Picasso.with(this).load(items.getHeadimg()).into(owner_img);
-            like_count.setText(items.getLike_count());
-            owner_id = items.getOwner_id();
-            owner_name.setText(items.getOwner_name());
+            itemsBean = good_detailsBean.getData().getItems();
+            Picasso.with(this).load(itemsBean.getGoods_image()).into(img);
+            name = itemsBean.getGoods_name();
+            goods_url = itemsBean.getGoods_url();
+            goods_name.setText(itemsBean.getGoods_name());
+            goods_price.setText("¥ " + itemsBean.getPrice());
+            Picasso.with(this).load(itemsBean.getHeadimg()).into(owner_img);
+            like_count.setText(itemsBean.getLike_count());
+            owner_id = itemsBean.getOwner_id();
+            owner_name.setText(itemsBean.getOwner_name());
         }
         //加载评论
-        if(requestCode == 2){
+        if (requestCode == 2) {
             Gson gson2 = new Gson();
             GoodsComments goodsComments = gson2.fromJson(result, GoodsComments.class);
-            items = goodsComments.getData().getItems();
-
+            itemsBeanList = goodsComments.getData().getItems();
             myadapter1.notifyDataSetChanged();
-        }
-        if(requestCode == 3){
-            Gson gson3 = new Gson();
-            GoodsComments goodsComments = gson3.fromJson(result, GoodsComments.class);
-            List<GoodsComments.DataBean.ItemsBean> items1 = goodsComments.getData().getItems();
-            items =  items1;
-            handler.sendEmptyMessage(1);
         }
     }
 }

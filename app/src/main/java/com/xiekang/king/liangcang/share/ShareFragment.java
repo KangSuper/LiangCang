@@ -48,15 +48,29 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     private Button set_bt;
     private View view_menu;
     private PopupWindow popupWindow;
-    private List<String> mlist = new ArrayList<>();
+    private List<ShareBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
     private ListView listview;
-
+    private List<String> mlist = new ArrayList<>();
     private List<String> list = new ArrayList<>();
     private List<String> mainlist = new ArrayList<>();
     private Button search_bt;
     private MenuAdapter menuAdapter;
     private String url;
     private RelativeLayout mRelative;
+    private int mPosition;
+    private PullToRefreshGridView refreshgrid;
+    private GridView gridview;
+    private int page = 1;
+    private Myadapter myadapter;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            refreshgrid.onRefreshComplete();
+            myadapter.notifyDataSetChanged();
+        }
+    };
 
     public static ShareFragment newInstance() {
         ShareFragment fragment = new ShareFragment();
@@ -158,7 +172,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.share_search:
-
+                Intent intent = new Intent(mContext, ProductSearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.share_set:
                 mainlist = list;
@@ -226,24 +241,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     }
 
 
-    private int mPosition;
-    private LinkedList<Share_conver> imglist = new LinkedList<>();
-    private PullToRefreshGridView refreshgrid;
-    private GridView gridview;
-    private int page = 1;
-    private Myadapter myadapter;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            refreshgrid.onRefreshComplete();
-            myadapter.notifyDataSetChanged();
-        }
-    };
-
     private void initdata() {
-
-
         HttpUtils.load(url).callBack(ShareFragment.this, 1);
     }
 
@@ -255,6 +253,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         gridview.setNumColumns(2);
         gridview.setVerticalSpacing(20);
         gridview.setHorizontalSpacing(20);
+
         refreshgrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -268,7 +267,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                 refreshView.getLoadingLayoutProxy()
                         .setLastUpdatedLabel("最后更新" + label);
                 page = 1;
-                HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                itemsBeanList.clear();
+                HttpUtils.load(GetUrl.getShareAllUrl(page)).callBack(ShareFragment.this, 4);
 
             }
 
@@ -295,7 +295,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
 
         @Override
         public int getCount() {
-            return items.size();
+            return itemsBeanList.size();
         }
 
         @Override
@@ -319,7 +319,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                 viewHolder = (ViewHolder) view.getTag();
             }
             viewHolder.imageView.setImageResource(R.mipmap.ic_launcher);
-            final ShareBean.DataBean.ItemsBean itemsBean = items.get(position);
+            final ShareBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
             Picasso.with(mContext).load(itemsBean.getGoods_image()).into(viewHolder.imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -349,59 +349,32 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         }
 
     }
-    private  List<ShareBean.DataBean.ItemsBean> items = new ArrayList<>();
+
     public void successJson(String result, int requestCode) {
         Gson gson = new Gson();
         ShareBean shareBean = gson.fromJson(result, ShareBean.class);
 
         if (requestCode == 1) {
-
-            List<ShareBean.DataBean.ItemsBean> items1 = shareBean.getData().getItems();
-//            for (int i = 0; i < items.size(); i++) {
-//                String goods_image = items.get(i).getGoods_image();
-//                String goods_id = items.get(i).getGoods_id();
-//                String sale_by = items.get(i).getSale_by();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
-//                imglist.addFirst(share_conver);
-//                handler.sendEmptyMessage(1);
-//            }
-            items.addAll(items1);
-            handler.sendEmptyMessage(1);
+            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+            itemsBeanList.addAll(items);
+            myadapter.notifyDataSetChanged();
         }
         //上拉
         if (requestCode == 2) {
-
-            List<ShareBean.DataBean.ItemsBean> items2 = shareBean.getData().getItems();
-//            for (int i = 0; i < items1.size(); i++) {
-//
-//                String goods_image = items1.get(i).getGoods_image();
-//                String goods_id = items1.get(i).getGoods_id();
-//                String sale_by = items1.get(i).getSale_by();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
-//                imglist.addLast(share_conver);
-//                //刷新
-//                // myadapter.notifyDataSetChanged();
-//                handler.sendEmptyMessage(1);
-//            }
-            items.addAll(items2);
+            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+            itemsBeanList.addAll(items);
+            handler.sendEmptyMessage(1);
+        } else if (requestCode == 3) {
+            itemsBeanList.clear();
+            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+            itemsBeanList.addAll(items);
             handler.sendEmptyMessage(1);
         }
         //下拉
         if (requestCode == 4) {
-            LinkedList<Share_conver> headlist = new LinkedList<>();
-            List<ShareBean.DataBean.ItemsBean> items3 = shareBean.getData().getItems();
-            items = items3;
+            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+            itemsBeanList.addAll(items);
             handler.sendEmptyMessage(1);
-//            for (int i = 0; i < items.size(); i++) {
-//                String goods_image = items.get(i).getGoods_image();
-//
-//                String goods_id = items.get(i).getGoods_id();
-//                String sale_by = items.get(i).getSale_by();
-//                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
-//                headlist.addFirst(share_conver);
-//                imglist = headlist;
-//                handler.sendEmptyMessage(1);
-//            }
         }
     }
 }

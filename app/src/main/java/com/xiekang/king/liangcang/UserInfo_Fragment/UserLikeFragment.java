@@ -1,7 +1,6 @@
 package com.xiekang.king.liangcang.UserInfo_Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,9 +18,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.UserInfo.UserLikeAndRecommendBean;
-import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.DateUtils;
 import com.xiekang.king.liangcang.utils.HttpUtils;
@@ -33,9 +30,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/9/12.
  */
-
-public class UserLikeFragment extends Fragment implements JsonCallBack{
-     private Context context;
+public class UserLikeFragment extends Fragment implements JsonCallBack {
+    private Context context;
     public String url;
     public int page = 1;
     private PullToRefreshGridView refreshGridView;
@@ -43,14 +39,6 @@ public class UserLikeFragment extends Fragment implements JsonCallBack{
     private List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goodsBeanList = new ArrayList<>();
     private Myadapter1 myadapter1;
     public String id;
-    private String TAG = "androidhello";
-    private List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            refreshGridView.onRefreshComplete();
-        }
-    };
 
     public UserLikeFragment(String id) {
         this.id = id;
@@ -88,8 +76,6 @@ public class UserLikeFragment extends Fragment implements JsonCallBack{
         gridview.setNumColumns(2);
         gridview.setVerticalSpacing(10);
         gridview.setHorizontalSpacing(10);
-        gridview.setVerticalSpacing(15);
-        gridview.setHorizontalSpacing(15);
         initdata();
         refreshGridView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         refreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
@@ -150,25 +136,9 @@ public class UserLikeFragment extends Fragment implements JsonCallBack{
             } else {
                 viewHolderUser = (ViewHolderUser) view.getTag();
             }
-            final UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean goodsBean = goodsBeanList.get(position);
+            UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean goodsBean = goodsBeanList.get(position);
             Picasso.with(context).load(goodsBean.getGoods_image()).into(viewHolderUser.imageView);
 
-            viewHolderUser.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String sale_by = goodsBean.getSale_by();
-                    String goods_id = goodsBean.getGoods_id();
-                    if (sale_by.equals("other")){
-                        Intent intent = new Intent(context, Goods_DetailActivity.class);
-                        intent.putExtra("id",goods_id);
-                        startActivity(intent);
-                    }else {
-                        Intent intent1 = new Intent(context, ShopInfoActivity.class);
-                        intent1.putExtra("id",goods_id);
-                        startActivity(intent1);
-                    }
-                }
-            });
             return view;
         }
     }
@@ -194,17 +164,4 @@ public class UserLikeFragment extends Fragment implements JsonCallBack{
             myadapter1.notifyDataSetChanged();
         }
     }
-//        if (requestCode == 2){
-//            Gson gson = new Gson();
-//            UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
-//            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods2 = bean.getData().getItems().getGoods();
-//            if (goods2!=null){
-//                goods.addAll(goods2);
-//
-//            }
-//            myadapter1.notifyDataSetChanged();
-//            refreshGridView.onRefreshComplete();
-//        }
-    }
-
-
+}
