@@ -31,7 +31,7 @@ import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.activity.ProductSearchActivity;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
-import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
+import com.xiekang.king.liangcang.activity.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
