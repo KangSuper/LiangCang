@@ -29,6 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
 import com.xiekang.king.liangcang.bean.Share.Share_conver;
 import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
@@ -323,9 +324,16 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Goods_DetailActivity.class);
-                    intent.putExtra("id", share_conver.id);
-                    startActivity(intent);
+
+                    if (share_conver.sale_by.equals("other")){
+                        Intent intent = new Intent(mContext, Goods_DetailActivity.class);
+                        intent.putExtra("id",share_conver.id);
+                        startActivity(intent);
+                    }else {
+                        Intent intent1 = new Intent(mContext, ShopInfoActivity.class);
+                        intent1.putExtra("id",share_conver.id);
+                        startActivity(intent1);
+                    }
                 }
             });
             return view;
@@ -352,7 +360,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
             for (int i = 0; i < items.size(); i++) {
                 String goods_image = items.get(i).getGoods_image();
                 String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                String sale_by = items.get(i).getSale_by();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
                 imglist.addFirst(share_conver);
                 handler.sendEmptyMessage(1);
             }
@@ -365,7 +374,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
 
                 String goods_image = items.get(i).getGoods_image();
                 String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                String sale_by = items.get(i).getSale_by();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
                 imglist.addLast(share_conver);
                 //刷新
                 // myadapter.notifyDataSetChanged();
@@ -380,7 +390,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                 String goods_image = items.get(i).getGoods_image();
 
                 String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
+                String sale_by = items.get(i).getSale_by();
+                Share_conver share_conver = new Share_conver(goods_image, goods_id,sale_by);
                 headlist.addFirst(share_conver);
                 imglist = headlist;
                 handler.sendEmptyMessage(1);

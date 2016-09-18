@@ -3,24 +3,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context="com.xiekang.king.liangcang.activity.ShopInfoActivity">
     <Button
         android:id="@+id/shop_info_back"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/actionbar_navigation_back"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ease_back"/>
     <Button
         android:id="@+id/shop_info_shopcar"
         android:layout_alignParentRight="true"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/actionbar_navigation_cart"/>
+    <LinearLayout
+        android:id="@+id/shop_info_line"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+       <LinearLayout
+           android:layout_width="50dp"
+           android:layout_height="match_parent"
+           android:background="@color/colorCustomer">
+           <ImageView
+               android:id="@+id/shop_info_customer"
+               android:background="@drawable/ic_customer_service_bottom"
+               android:layout_gravity="center"
+               android:layout_width="30dp"
+               android:layout_height="30dp" />
+       </LinearLayout>
+        <Button
+            android:id="@+id/shop_info_joinCar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorShopcar"
+            android:text="加入购物车"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"/>
+        <Button
+            android:id="@+id/shop_info_Buy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorBuy"
+            android:text="直接购买"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"/>
+    </LinearLayout>
     <ScrollView
         android:id="@+id/shop_info_scroll"
+        android:layout_above="@id/shop_info_line"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -31,7 +70,7 @@
                 android:id="@+id/shop_info_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp" />
             <RelativeLayout
                 android:id="@+id/shop_info_re"
                 android:layout_below="@id/shop_info_viewpager"
@@ -55,8 +94,8 @@
                     android:id="@+id/shop_info_heart"
                     android:layout_alignParentRight="true"
                     android:layout_alignTop="@id/shop_info_name"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/ic_favor_no_data"/>
                 <TextView
@@ -65,7 +104,8 @@
                     android:layout_below="@id/shop_info_heart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="7sp"
+                    android:textSize="10sp"
+
                     android:textColor="@color/colorBlue2"
                     android:layout_marginBottom="10dp"/>
                 <ImageView
@@ -74,7 +114,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/address_edit"/>
+                    android:background="@drawable/ic_share_shopgood"/>
                 <TextView
                     android:id="@+id/shop_info_price"
                     android:layout_below="@id/shop_info_goodsname"
@@ -82,33 +122,117 @@
                     android:layout_width="wrap_content"
                     android:textColor="@color/colorBlue3"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"/>
+                    android:textSize="20sp"/>
                 <TextView
                     android:id="@+id/shop_info_mian"
                     android:layout_alignTop="@id/shop_info_price"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorText"
-                    android:textSize="7sp"
+                    android:textSize="10sp"
                     android:text="免运费 正版授权"/>
                 <RelativeLayout
                     android:id="@+id/shop_info_size"
+                    android:layout_below="@id/shop_info_price"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="30dp"
+                    android:background="@color/colorGoodsize"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
                     <ImageView
                         android:id="@+id/shop1"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ease_dx_checkbox_gray_on"/>
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/ic_size_choose"/>
                     <TextView
+                        android:id="@+id/shop2"
+                        android:layout_toRightOf="@id/shop1"
                         android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorWhite"
                         android:textSize="10sp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="10dp"
                         android:text="选择 尺寸 颜色 数量"/>
+                    <ImageView
+                        android:id="@+id/shop3"
+                        android:background="@drawable/ic_order_arrow_right"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/shop_info_logo"
+                    android:layout_marginTop="20dp"
+
+                    android:layout_below="@id/shop_info_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorGoodsize">
+                    <ImageView
+                        android:id="@+id/shop_info_logo_img"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
+                    <TextView
+                        android:id="@+id/shop_info_logo_name"
+                        android:layout_toRightOf="@id/shop_info_logo_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp"
+                       android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/shop4"
+                        android:background="@drawable/ic_order_arrow_right"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        />
+                </RelativeLayout>
+                <RadioGroup
+                    android:id="@+id/shop_info_radio_group"
+                    android:layout_below="@id/shop_info_logo"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+                    <RadioButton
+                        android:id="@+id/shop_info_good_detail"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="商品详情"
+                        android:textSize="12sp"
+                        android:button="@null"
+                        android:textColor="@color/shape_shopinfo"
+                        android:gravity="center"
+                        android:background="@drawable/shopinfo_bt"/>
+                    <RadioButton
+                        android:id="@+id/shop_info_good_guide"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:text="购物须知"
+                        android:textSize="12sp"
+                        android:textColor="@color/shape_shopinfo"
+                        android:gravity="center"
+                        android:background="@drawable/shopinfo_bt"/>
+                </RadioGroup>
+                <FrameLayout
+                    android:id="@+id/shop_info_fram"
+                    android:layout_below="@id/shop_info_radio_group"
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
             </RelativeLayout>
 
         </RelativeLayout>
