@@ -2,6 +2,7 @@ package com.xiekang.king.liangcang.shop.gift;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,8 +25,10 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.shop.CgDetailsBean;
 import com.xiekang.king.liangcang.bean.shop.OrderBean;
+import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.DateUtils;
 import com.xiekang.king.liangcang.utils.FragmentCallBack;
@@ -38,7 +41,6 @@ import java.util.List;
 
 
 public class GiftProFragment extends Fragment {
-    private static final String TAG = "androidxx";
     private Context mContext;
     private String id;
     private int page = 1;
@@ -126,8 +128,25 @@ public class GiftProFragment extends Fragment {
         mGridView.setHorizontalSpacing(10);
         mAdapter = new MyAdapter();
         mGridView.setAdapter(mAdapter);
+        mGridView.setOnItemClickListener(itemClickListener1);
         return view;
     }
+
+
+    private AdapterView.OnItemClickListener itemClickListener1 = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            CgDetailsBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
+            Intent intent = new Intent();
+            if (itemsBean.getSale_by().equals("other")) {
+                intent.setClass(mContext, Goods_DetailActivity.class);
+            } else {
+                intent.setClass(mContext, ShopInfoActivity.class);
+            }
+            intent.putExtra("id", itemsBean.getGoods_id());
+            startActivity(intent);
+        }
+    };
 
     private AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override

@@ -1,9 +1,7 @@
 package com.xiekang.king.liangcang.detail;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +18,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.activity.UserInformationActivity;
+import com.xiekang.king.liangcang.activity.WebActivity;
 import com.xiekang.king.liangcang.bean.detail.Good_DetailsBean;
 import com.xiekang.king.liangcang.bean.detail.GoodsComments;
 import com.xiekang.king.liangcang.urlString.GetUrl;
@@ -32,7 +31,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Goods_DetailActivity extends AppCompatActivity implements JsonCallBack {
+
+public class Goods_DetailActivity extends AppCompatActivity implements JsonCallBack, View.OnClickListener {
+    @BindView(R.id.share_detail_link)
+    Button link_bt;
+
     @BindView(R.id.share_detail_img)
     ImageView img;
     @BindView(R.id.share_detail_goods_name)
@@ -49,33 +52,12 @@ public class Goods_DetailActivity extends AppCompatActivity implements JsonCallB
     ListView listView;
     @BindView(R.id.share_detail_loadcomment)
     Button loadcomment;
-public class Goods_DetailActivity extends Activity implements JsonCallBack,View.OnClickListener{
-    @BindView(R.id.share_detail_link)Button link_bt;
-
-    @BindView(R.id.share_detail_img)ImageView img;
-    @BindView(R.id.share_detail_goods_name)TextView goods_name;
-    @BindView(R.id.share_detail_price)TextView goods_price;
-    @BindView(R.id.share_detail_like_count)TextView like_count;
-    @BindView(R.id.share_detail_owner)ImageView owner_img;
-    @BindView(R.id.share_detail_owner_name)TextView owner_name;
-    @BindView(R.id.share_detail_listview)ListView listView;
-    @BindView(R.id.share_detail_loadcomment)Button loadcomment;
-    @BindView(R.id.share_detail_pullscroll)PullToRefreshScrollView pullscroview;
     private String id;
     private String owner_id;
     private Context context = this;
     private List<GoodsComments.DataBean.ItemsBean> items = new ArrayList<>();
     private Myadapter1 myadapter1;
     private int page = 1;
-
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            pullscroview.onRefreshComplete();
-            myadapter1.notifyDataSetChanged();
-        }
-    };
     private String name;
     private String goods_url;
 
@@ -98,27 +80,19 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
     }
 
     private void initView() {
+        ButterKnife.bind(this);
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.hide();
         ImageView backImg = (ImageView) findViewById(R.id.goods_header_back);
-        ImageView shareImg = (ImageView) findViewById(R.id.goods_header_share);
         backImg.setOnClickListener(new View.OnClickListener() {
-
-        //context = this;
-        ButterKnife.bind(this);
-        link_bt.setOnClickListener(this);
-
-        pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        ScrollView refreshableView = pullscroview.getRefreshableView();
-        pullscroview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        ImageView shareImg = (ImageView) findViewById(R.id.goods_header_share);
+        link_bt.setOnClickListener(this);
 
-
-        ButterKnife.bind(this);
     }
 
     private void loaddata() {
@@ -128,16 +102,15 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
         HttpUtils.load(GetUrl.getGoodsComments(id, page)).callBack(this, 2);
     }
 
-    class Myadapter1 extends BaseAdapter {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, WebActivity.class);
-        intent.putExtra("name",name);
-        intent.putExtra("url",goods_url);
+        intent.putExtra("name", name);
+        intent.putExtra("url", goods_url);
         startActivity(intent);
     }
 
-    class Myadapter1 extends BaseAdapter{
+    class Myadapter1 extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -196,8 +169,6 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
     }
 
 
-
-
     @Override
     public void successJson(String result, int requestCode) {
         //返回商品详情
@@ -208,7 +179,6 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
             Picasso.with(this).load(items.getGoods_image()).into(img);
             name = items.getGoods_name();
             goods_url = items.getGoods_url();
-
             goods_name.setText(items.getGoods_name());
             goods_price.setText("¥ " + items.getPrice());
             Picasso.with(this).load(items.getHeadimg()).into(owner_img);

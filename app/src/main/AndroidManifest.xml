@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,8 +35,10 @@
         <activity android:name=".activity.UserInformationActivity" />
         <activity android:name=".activity.UserSearchActivity" />
         <activity android:name=".activity.BeforeLoadActivity" />
-        <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.ShopInfoActivity"/>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.ShopInfoActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.FirstShowActivity"></activity>
     </application>
 
 </manifest>

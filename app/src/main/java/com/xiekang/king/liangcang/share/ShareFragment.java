@@ -30,6 +30,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.activity.ProductSearchActivity;
+import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
 import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
@@ -185,19 +186,17 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                         if (position == 0) {
                             page = 1;
                             url = GetUrl.getShareAllUrl(page);
-                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 3);
                             popupWindow.dismiss();
                         } else if (position == 1) {
                             page = 1;
                             url = GetUrl.getShareShopUrl(page);
-                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 3);
                             popupWindow.dismiss();
-
                         } else if (position > 2) {
                             page = 1;
                             url = GetUrl.getShareCategoryUrl(position - 2, page);
-                            itemsBeanList.clear();
-                            HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                            HttpUtils.load(url).callBack(ShareFragment.this, 3);
                             popupWindow.dismiss();
                         }
                         if (position == 2) {
@@ -247,6 +246,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         gridview.setNumColumns(2);
         gridview.setVerticalSpacing(20);
         gridview.setHorizontalSpacing(20);
+
         refreshgrid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -317,7 +317,12 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Goods_DetailActivity.class);
+                    Intent intent = new Intent();
+                    if (itemsBean.getSale_by().equals("other")) {
+                        intent.setClass(mContext, Goods_DetailActivity.class);
+                    } else {
+                        intent.setClass(mContext, ShopInfoActivity.class);
+                    }
                     intent.putExtra("id", itemsBean.getGoods_id());
                     startActivity(intent);
                 }
@@ -346,7 +351,11 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         }
         //上拉
         if (requestCode == 2) {
-
+            List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
+            itemsBeanList.addAll(items);
+            handler.sendEmptyMessage(1);
+        } else if (requestCode == 3) {
+            itemsBeanList.clear();
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
             itemsBeanList.addAll(items);
             handler.sendEmptyMessage(1);
