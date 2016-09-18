@@ -1,7 +1,6 @@
 package com.xiekang.king.liangcang.UserInfo_Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,7 +19,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.activity.UserInformationActivity;
 import com.xiekang.king.liangcang.bean.UserInfo.UserFollowAndFollowedsBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.DateUtils;
@@ -138,22 +136,13 @@ public class UserFansFragment extends Fragment implements JsonCallBack {
                 viewHolderUser = (ViewHolderUser) view.getTag();
             }
 
-            final UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean usersBean = usersBeanList.get(position);
+            UserFollowAndFollowedsBean.DataBean.ItemsBean.UsersBean usersBean = usersBeanList.get(position);
             String orig = usersBean.getUser_image().getOrig();
             String user_name = usersBean.getUser_name();
             String user_desc = usersBean.getUser_desc();
             Picasso.with(context).load(orig).into(viewHolderUser.imageView);
             viewHolderUser.name.setText(user_name);
             viewHolderUser.job.setText(user_desc);
-            viewHolderUser.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String user_id = usersBean.getUser_id();
-                    Intent intent = new Intent(context, UserInformationActivity.class);
-                    intent.putExtra("id",user_id);
-                    startActivity(intent);
-                }
-            });
             return view;
         }
     }
