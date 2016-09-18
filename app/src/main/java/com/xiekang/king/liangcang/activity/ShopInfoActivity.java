@@ -1,8 +1,7 @@
 package com.xiekang.king.liangcang.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -67,8 +66,14 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
     private Context context;
     private Myadapter myadapter;
     private FragmentManager supportFragmentManager;
-    private int brand_id;
     private ActionBar supportActionBar;
+    private String brand_name;
+    private String brand_logo;
+    private String brand_id;
+    private String goods_image;
+    private String good_price;
+    private String good_name;
+    private ShopInfo.DataBean.ItemsBean items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,9 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
     //初始化视图
     private void initview() {
         ButterKnife.bind(this);
+
+
+        logo.setOnClickListener(this);
         supportFragmentManager = getSupportFragmentManager();
         radioGroup.setOnCheckedChangeListener(this);
         myadapter = new Myadapter();
@@ -127,14 +135,23 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
                 finish();
                 break;
             case R.id.shop_info_shopcar:
-
+                Toast.makeText(ShopInfoActivity.this, "111111", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.shop_info_joinCar:
 
             case R.id.shop_info_Buy:
-
+                Intent intent1 = new Intent(this, PayActivity.class);
+                intent1.putExtra("id",id);
+                startActivity(intent1);
                 break;
             case R.id.shop_info_customer:
+                break;
+            case R.id.shop_info_logo:
+                Intent intent = new Intent(this, BrandDetailsActivity.class);
+                intent.putExtra("id",brand_id);
+                intent.putExtra("url",brand_logo);
+                intent.putExtra("name",brand_name);
+                startActivity(intent);
                 break;
         }
     }
@@ -166,24 +183,20 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
             container.removeView((View) object);
         }
     }
-//    class Viewholder{
-//        public ImageView imageView;
-//        public Viewholder(View view){
-//            view.setTag(this);
-//            imageView = (ImageView) view.findViewById(R.id.viewpager_item_img);
-//        }
- //   }
 
     @Override
     public void successJson(String result, int requestCode) {
         if (requestCode ==1){
             Gson gson = new Gson();
             ShopInfo shopInfo = gson.fromJson(result, ShopInfo.class);
-            ShopInfo.DataBean.ItemsBean items = shopInfo.getData().getItems();
+            items = shopInfo.getData().getItems();
 
-            brand_id = items.getBrand_info().getBrand_id();
+//            goods_image = items.getGoods_image();
+//            good_price = items.getSku_inv().get(0).getPrice();
+//            good_name = items.getGoods_name();
+
             images_item = items.getImages_item();
-            String brand_name = items.getBrand_info().getBrand_name();
+            brand_name = items.getBrand_info().getBrand_name();
             name.setText(brand_name);
             goodsname.setText(items.getGoods_name());
             like_count = items.getLike_count();
@@ -191,6 +204,8 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
             price.setText("¥ "+items.getSku_inv().get(0).getPrice());
             Picasso.with(this).load(items.getHeadimg()).into(logo_img);
             logo_name.setText(brand_name);
+            brand_logo = items.getBrand_info().getBrand_logo();
+            brand_id = items.getBrand_info().getBrand_id()+"";
             myadapter.notifyDataSetChanged();
         }
     }

@@ -93,6 +93,7 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
         //context = this;
         ButterKnife.bind(this);
         link_bt.setOnClickListener(this);
+        loadcomment.setOnClickListener(this);
 
         pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ScrollView refreshableView = pullscroview.getRefreshableView();
@@ -134,10 +135,14 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, WebActivity.class);
-        intent.putExtra("name",name);
-        intent.putExtra("url",goods_url);
-        startActivity(intent);
+        if (v.getId()==R.id.share_detail_link){
+            Intent intent = new Intent(context, WebActivity.class);
+            intent.putExtra("name",name);
+            intent.putExtra("url",goods_url);
+            startActivity(intent);
+        }else if (v.getId()==R.id.share_detail_loadcomment){
+
+        }
     }
 
     class Myadapter1 extends BaseAdapter{
@@ -222,6 +227,7 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
             Gson gson2 = new Gson();
             GoodsComments goodsComments = gson2.fromJson(result, GoodsComments.class);
             items = goodsComments.getData().getItems();
+
             myadapter1.notifyDataSetChanged();
         }
         if(requestCode == 3){

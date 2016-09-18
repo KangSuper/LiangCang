@@ -8,9 +8,9 @@
         android:id="@+id/share_menu_item_tv"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="30dp"
+        android:paddingLeft="30dp"
         android:background="@drawable/menu_item"
         android:gravity="center_vertical"
-        android:textColor="@color/colorText"
+        android:textColor="@color/share_menu_tex"
         android:textSize="15sp" />
 </LinearLayout>
