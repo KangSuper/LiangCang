@@ -14,12 +14,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UseFollowFragment;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserFansFragment;
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserLikeFragment;
+
 import com.xiekang.king.liangcang.UserInfo_Fragment.UserRecommendFragment;
+
 import com.xiekang.king.liangcang.bean.UserInfo.UserLikeAndRecommendBean;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
@@ -57,6 +61,8 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
     RadioButton user_recommend;
     @BindView(R.id.user_fram)
     FrameLayout frameLayout;
+
+    private String url;
     private String id;
     private String name;
     private FragmentManager fragmentManager;
@@ -67,11 +73,13 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
 
+
         supportActionBar = getSupportActionBar();
         supportActionBar.hide();
         fragmentManager = getSupportFragmentManager();
         id = getIntent().getExtras().getString("id");
         initview();
+
         user_like.setChecked(true);
         user_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +124,7 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
                         break;
                     case R.id.user_radio_bt_fans:
                         FragmentTransaction transaction3 = fragmentManager.beginTransaction();
+
                         UserFansFragment userFansFragment = new UserFansFragment(id);
                         transaction3.replace(R.id.user_fram, userFansFragment);
                         transaction3.commit();
@@ -123,6 +132,7 @@ public class UserInformationActivity extends AppCompatActivity implements JsonCa
                 }
             }
         });
+
 
     }
 

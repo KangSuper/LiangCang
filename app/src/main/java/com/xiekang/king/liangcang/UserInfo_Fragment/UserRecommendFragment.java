@@ -1,6 +1,7 @@
 package com.xiekang.king.liangcang.UserInfo_Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +19,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.UserInfo.UserLikeAndRecommendBean;
+import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.DateUtils;
 import com.xiekang.king.liangcang.utils.HttpUtils;
@@ -39,18 +42,11 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
     private List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goodsBeanList = new ArrayList<>();
     private Myadapter2 myadapter2;
     public String id;
-
-
-    public UserRecommendFragment(String id) {
-        this.id = id;
-    }
-
-    private Handler mHandler = new Handler() {
+    private List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods = new ArrayList<>();
+    private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             myadapter2.notifyDataSetChanged();
-            refreshGridView.setLastUpdatedLabel("最后更新:" + DateUtils.getCurrentTime());
             refreshGridView.onRefreshComplete();
         }
     };
@@ -61,7 +57,9 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
         context = getContext();
     }
 
-    @Nullable
+    public UserRecommendFragment(String id) {
+        this.id = id;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.userinfo_fragment, container, false);
@@ -77,6 +75,8 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
         refreshGridView = (PullToRefreshGridView) view.findViewById(R.id.use_fragment_pullgrid);
         gridview = refreshGridView.getRefreshableView();
         gridview.setNumColumns(2);
+        gridview.setVerticalSpacing(15);
+        gridview.setHorizontalSpacing(15);
         initdata();
         refreshGridView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         refreshGridView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
@@ -102,6 +102,8 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
                         }
                     }
                 }, 2);
+                url = GetUrl.getUserTuijian(id,page);
+                HttpUtils.load(url).callBack(UserRecommendFragment.this,1);
             }
         });
     }
@@ -115,7 +117,7 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
 
         @Override
         public int getCount() {
-            return goodsBeanList.size();
+            return goods==null?0:goods.size();
         }
 
         @Override
@@ -139,9 +141,24 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
             } else {
                 viewHolderUser = (ViewHolderUser2) view.getTag();
             }
-            UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean goodsBean = goodsBeanList.get(position);
+            final UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean goodsBean = goods.get(position);
             Picasso.with(context).load(goodsBean.getGoods_image()).into(viewHolderUser.imageView);
-
+            viewHolderUser.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String sale_by = goodsBean.getSale_by();
+                    String goods_id = goodsBean.getGoods_id();
+                    if (sale_by.equals("other")){
+                        Intent intent = new Intent(context, Goods_DetailActivity.class);
+                        intent.putExtra("id",goods_id);
+                        startActivity(intent);
+                    }else {
+                        Intent intent1 = new Intent(context, ShopInfoActivity.class);
+                        intent1.putExtra("id",goods_id);
+                        startActivity(intent1);
+                    }
+                }
+            });
             return view;
         }
     }
@@ -159,10 +176,14 @@ public class UserRecommendFragment extends Fragment implements JsonCallBack{
         if (requestCode == 1) {
             Gson gson = new Gson();
             UserLikeAndRecommendBean bean = gson.fromJson(result, UserLikeAndRecommendBean.class);
-            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods = bean.getData().getItems().getGoods();
-            goodsBeanList.addAll(goods);
-            myadapter2.notifyDataSetChanged();
+            List<UserLikeAndRecommendBean.DataBean.ItemsBean.GoodsBean> goods1 = bean.getData().getItems().getGoods();
+            if (goods1!=null){
+                goods.addAll(goods1);
+            }
+            mHandler.sendEmptyMessageDelayed(1,1000);
+        }
+//
         }
     }
 
-}
+
