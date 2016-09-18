@@ -10,96 +10,97 @@
         android:id="@+id/before_weibo_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/app_weibo"
-        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/app_weibo" />
 
     <ImageView
         android:id="@+id/before_qq_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/app_tencent_qq"
         android:layout_alignBottom="@id/before_weibo_image"
         android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@id/before_weibo_image"/>
+        android:layout_toLeftOf="@id/before_weibo_image"
+        android:src="@drawable/app_tencent_qq" />
 
     <ImageView
         android:id="@+id/before_douban_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/app_douban"
         android:layout_alignBottom="@id/before_weibo_image"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@id/before_weibo_image"/>
+        android:layout_toRightOf="@id/before_weibo_image"
+        android:src="@drawable/app_douban" />
 
     <ImageView
         android:id="@+id/before_weixin_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/app_tencent_weixin"
         android:layout_alignBottom="@id/before_weibo_image"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@id/before_douban_image"/>
+        android:layout_toRightOf="@id/before_douban_image"
+        android:src="@drawable/app_tencent_weixin" />
 
     <LinearLayout
         android:id="@+id/before_linear"
-        android:background="@color/colorWhite"
         android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_above="@id/before_weibo_image"
         android:layout_margin="15dp"
-        android:layout_height="1dp"
-        android:orientation="horizontal"/>
+        android:background="@color/colorWhite"
+        android:orientation="horizontal" />
 
     <TextView
         android:id="@+id/before_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="社交账户登录"
         android:layout_above="@id/before_linear"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="社交账户登录" />
 
     <Button
         android:id="@+id/before_load_btn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_margin="15dp"
         android:layout_above="@id/before_text_view"
+        android:layout_margin="15dp"
         android:background="@color/colorWhite"
         android:text="登录"
-        android:textColor="@color/colorBlank"/>
+        android:textColor="@color/colorBlank" />
 
     <Button
         android:id="@+id/before_register_btn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_above="@id/before_load_btn"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_above="@id/before_load_btn"
         android:background="@color/colorWhite"
+        android:drawableRight="@drawable/register_bonus"
         android:paddingRight="5dp"
         android:text="注册良仓"
-        android:drawableRight="@drawable/register_bonus"
-        android:textColor="@color/colorBlank"/>
+        android:textColor="@color/colorBlank" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/bg_login_register"
+        android:layout_above="@id/before_register_btn"
         android:scaleType="fitXY"
-        android:layout_above="@id/before_register_btn"/>
+        android:src="@drawable/bg_login_register" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/icon_large"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="100dp"
+        android:src="@drawable/icon_large" />
 
     <ImageView
-        android:src="@drawable/ic_pack_close"
-        android:layout_margin="15dp"
-        android:layout_alignParentRight="true"
+        android:id="@+id/before_back"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_pack_close" />
 </RelativeLayout>
