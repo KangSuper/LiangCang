@@ -12,6 +12,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
 
 import com.xiekang.king.liangcang.activity.UserInformationActivity;
+import com.xiekang.king.liangcang.activity.WebActivity;
 import com.xiekang.king.liangcang.bean.detail.Good_DetailsBean;
 import com.xiekang.king.liangcang.bean.detail.GoodsComments;
 import com.xiekang.king.liangcang.urlString.GetUrl;
@@ -40,7 +42,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Goods_DetailActivity extends Activity implements JsonCallBack{
+public class Goods_DetailActivity extends Activity implements JsonCallBack,View.OnClickListener{
+    @BindView(R.id.share_detail_link)Button link_bt;
+
     @BindView(R.id.share_detail_img)ImageView img;
     @BindView(R.id.share_detail_goods_name)TextView goods_name;
     @BindView(R.id.share_detail_price)TextView goods_price;
@@ -64,6 +68,9 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
             myadapter1.notifyDataSetChanged();
         }
     };
+    private String name;
+    private String goods_url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +92,8 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
 
         //context = this;
         ButterKnife.bind(this);
+        link_bt.setOnClickListener(this);
+
         pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         ScrollView refreshableView = pullscroview.getRefreshableView();
         pullscroview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
@@ -121,6 +130,14 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
         id =  intent.getExtras().getString("id");
         HttpUtils.load(GetUrl.getGoodsDetail(id)).callBack(this,1);
         HttpUtils.load(GetUrl.getGoodsComments(id,page)).callBack(this,2);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra("name",name);
+        intent.putExtra("url",goods_url);
+        startActivity(intent);
     }
 
     class Myadapter1 extends BaseAdapter{
@@ -190,6 +207,9 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack{
             Good_DetailsBean good_detailsBean = gson.fromJson(result, Good_DetailsBean.class);
             Good_DetailsBean.DataBean.ItemsBean items = good_detailsBean.getData().getItems();
             Picasso.with(this).load(items.getGoods_image()).into(img);
+            name = items.getGoods_name();
+            goods_url = items.getGoods_url();
+
             goods_name.setText(items.getGoods_name());
             goods_price.setText("¥ "+items.getPrice());
             Picasso.with(this).load(items.getHeadimg()).into(owner_img);
