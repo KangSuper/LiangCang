@@ -1,5 +1,6 @@
 package com.xiekang.king.liangcang.detail;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +17,11 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -49,10 +52,7 @@ public class Goods_DetailActivity extends Activity implements JsonCallBack,View.
     @BindView(R.id.share_detail_write)Button write;
     @BindView(R.id.share_detail_send)Button send;
     @BindView(R.id.share_detail_line11)LinearLayout line11;
-
-public class Goods_DetailActivity extends AppCompatActivity implements JsonCallBack, View.OnClickListener {
-    @BindView(R.id.share_detail_link)
-    Button link_bt;
+    @BindView(R.id.goods_header_back)ImageView back;
 
     @BindView(R.id.share_detail_img)
     ImageView img;
@@ -81,7 +81,7 @@ public class Goods_DetailActivity extends AppCompatActivity implements JsonCallB
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            pullscroview.onRefreshComplete();
+           // pullscroview.onRefreshComplete();
             myadapter1.notifyDataSetChanged();
         }
     };
@@ -110,21 +110,22 @@ public class Goods_DetailActivity extends AppCompatActivity implements JsonCallB
         line11.setVisibility(View.GONE);
 
         link_bt.setOnClickListener(this);
+        back.setOnClickListener(this);
         loadcomment.setOnClickListener(this);
         write.setOnClickListener(this);
 
-        pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        ScrollView refreshableView = pullscroview.getRefreshableView();
-        pullscroview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.hide();
-        ImageView backImg = (ImageView) findViewById(R.id.goods_header_back);
-        backImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        ActionBar supportActionBar = getSupportActionBar();
+//        supportActionBar.hide();
+//        pullscroview.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+//        ScrollView refreshableView = pullscroview.getRefreshableView();
+//        pullscroview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+//        ImageView backImg = (ImageView) findViewById(R.id.goods_header_back);
+//        backImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
         ImageView shareImg = (ImageView) findViewById(R.id.goods_header_share);
         if (shareImg != null) {
             shareImg.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +192,9 @@ public class Goods_DetailActivity extends AppCompatActivity implements JsonCallB
                     Toast.makeText(Goods_DetailActivity.this, "发送", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+        if (v.getId()==R.id.goods_header_back){
+            finish();
         }
     }
 

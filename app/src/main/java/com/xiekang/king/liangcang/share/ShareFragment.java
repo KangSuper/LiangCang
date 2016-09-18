@@ -29,6 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ProductSearchActivity;
 import com.xiekang.king.liangcang.activity.ShopInfoActivity;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
 import com.xiekang.king.liangcang.bean.Share.Share_conver;
@@ -318,7 +319,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            viewHolder.imageView.setImageResource(R.mipmap.ic_launcher);
+
             final ShareBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
             Picasso.with(mContext).load(itemsBean.getGoods_image()).into(viewHolder.imageView);
             view.setOnClickListener(new View.OnClickListener() {
@@ -373,7 +374,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
         //下拉
         if (requestCode == 4) {
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-            itemsBeanList.addAll(items);
+            itemsBeanList = items;
             handler.sendEmptyMessage(1);
         }
     }

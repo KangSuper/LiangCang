@@ -53,7 +53,7 @@
         <activity android:name=".activity.ShopInfoActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.FirstShowActivity"/>
-
+        <activity android:name=".activity.PayActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

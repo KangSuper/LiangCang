@@ -2,6 +2,7 @@ package com.xiekang.king.liangcang.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -192,7 +193,9 @@ public class ShopInfoActivity extends AppCompatActivity implements JsonCallBack,
             case R.id.shop_info_joinCar:
 
             case R.id.shop_info_Buy:
-
+                Intent intent1 = new Intent(this, PayActivity.class);
+                intent1.putExtra("id",id);
+                startActivity(intent1);
                 break;
             case R.id.shop_info_customer:
                 break;
