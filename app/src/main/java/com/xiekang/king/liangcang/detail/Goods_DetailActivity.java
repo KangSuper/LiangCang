@@ -1,4 +1,4 @@
-package com.xiekang.king.liangcang.activity;
+package com.xiekang.king.liangcang.detail;
 
 import android.content.Context;
 import android.content.Intent;

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.Goods_DetailActivity">
+    tools:context="com.xiekang.king.liangcang.detail.Goods_DetailActivity">
 
     <RelativeLayout
         android:id="@+id/goods_header_relative"
