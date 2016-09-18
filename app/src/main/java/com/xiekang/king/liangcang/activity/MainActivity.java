@@ -1,5 +1,6 @@
 package com.xiekang.king.liangcang.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -7,14 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.xiekang.king.liangcang.R;
-import com.xiekang.king.liangcang.magezine.AuthorFragment;
-import com.xiekang.king.liangcang.magezine.CateFragment;
 import com.xiekang.king.liangcang.magezine.MagazineFragment;
 import com.xiekang.king.liangcang.magezine.MgzDetailsFragment;
 import com.xiekang.king.liangcang.magezine.SelectFragment;
@@ -29,7 +27,7 @@ import com.xiekang.king.liangcang.utils.GiftCallBack;
 import com.xiekang.king.liangcang.utils.MgzCallBack;
 import com.xiekang.king.liangcang.utils.MgzSeCallBack;
 
-public class MainActivity extends AppCompatActivity implements FragmentCallBack,GiftCallBack,MgzCallBack,MgzSeCallBack{
+public class MainActivity extends AppCompatActivity implements FragmentCallBack, GiftCallBack, MgzCallBack, MgzSeCallBack {
 
     private FragmentManager mFragmentManager;
     private Fragment mCurrentShowFragment;
@@ -156,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
     }
 
 
-
     @Override
     public void gDataCall(String id) {
         giftProFragment = GiftProFragment.newInstance(id);
@@ -173,45 +170,41 @@ public class MainActivity extends AppCompatActivity implements FragmentCallBack,
     @Override
     public void mDataCall() {
         mgzDetailsFragment = MgzDetailsFragment.newInstance();
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-//        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
-//            fragmentTransaction.hide(mCurrentShowFragment);
-//        }
-//        if (!mgzDetailsFragment.isAdded()) {
-//            fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
-//            fragmentTransaction.add(R.id.main_frame_layout, mgzDetailsFragment);
-//        } else {
-//            fragmentTransaction.show(mgzDetailsFragment);
-//        }
-//        fragmentTransaction.commit();
-//        mCurrentShowFragment = mgzDetailsFragment;
-        ctrlFragment(mgzDetailsFragment);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
+            fragmentTransaction.hide(mCurrentShowFragment);
+        }
+        if (!mgzDetailsFragment.isAdded()) {
+            fragmentTransaction.setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out);
+            fragmentTransaction.add(R.id.main_frame_layout, mgzDetailsFragment);
+        } else {
+            fragmentTransaction.show(mgzDetailsFragment);
+        }
+        fragmentTransaction.commit();
+        mCurrentShowFragment = mgzDetailsFragment;
     }
 
     @Override
     public void mBackCall() {
         ctrlFragment(magazineFragment);
-
-//        mFragmentManager.beginTransaction().remove(CateFragment.newInstance()).remove(AuthorFragment.newInstance()).commit();
     }
 
 
     @Override
-    public void msDataCall(String category, String id,String title) {
-        selectFragment = SelectFragment.newInstance(category,id,title);
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-//        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
-//            fragmentTransaction.hide(mCurrentShowFragment);
-//        }
-//        if (!selectFragment.isAdded()) {
-//            fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
-//            fragmentTransaction.add(R.id.main_frame_layout, selectFragment);
-//        } else {
-//            fragmentTransaction.show(selectFragment);
-//        }
-//        fragmentTransaction.commit();
-//        mCurrentShowFragment = selectFragment;
-        ctrlFragment(selectFragment);
+    public void msDataCall(String category, String id, String title) {
+        selectFragment = SelectFragment.newInstance(category, id, title);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        if (mCurrentShowFragment != null && mCurrentShowFragment.isAdded()) {
+            fragmentTransaction.hide(mCurrentShowFragment);
+        }
+        if (!selectFragment.isAdded()) {
+            fragmentTransaction.setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out);
+            fragmentTransaction.add(R.id.main_frame_layout, selectFragment);
+        } else {
+            fragmentTransaction.show(selectFragment);
+        }
+        fragmentTransaction.commit();
+        mCurrentShowFragment = selectFragment;
     }
 
     @Override

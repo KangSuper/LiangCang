@@ -29,15 +29,14 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.squareup.picasso.Picasso;
 import com.xiekang.king.liangcang.R;
+import com.xiekang.king.liangcang.activity.ProductSearchActivity;
 import com.xiekang.king.liangcang.bean.Share.ShareBean;
-import com.xiekang.king.liangcang.bean.Share.Share_conver;
 import com.xiekang.king.liangcang.detail.Goods_DetailActivity;
 import com.xiekang.king.liangcang.urlString.GetUrl;
 import com.xiekang.king.liangcang.utils.HttpUtils;
 import com.xiekang.king.liangcang.utils.JsonCallBack;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -47,15 +46,29 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     private Button set_bt;
     private View view_menu;
     private PopupWindow popupWindow;
-    private List<String> mlist = new ArrayList<>();
+    private List<ShareBean.DataBean.ItemsBean> itemsBeanList = new ArrayList<>();
     private ListView listview;
-
+    private List<String> mlist = new ArrayList<>();
     private List<String> list = new ArrayList<>();
     private List<String> mainlist = new ArrayList<>();
     private Button search_bt;
     private MenuAdapter menuAdapter;
     private String url;
     private RelativeLayout mRelative;
+    private int mPosition;
+    private PullToRefreshGridView refreshgrid;
+    private GridView gridview;
+    private int page = 1;
+    private Myadapter myadapter;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            refreshgrid.onRefreshComplete();
+            myadapter.notifyDataSetChanged();
+        }
+    };
 
     public static ShareFragment newInstance() {
         ShareFragment fragment = new ShareFragment();
@@ -157,25 +170,23 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.share_search:
-
+                Intent intent = new Intent(mContext, ProductSearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.share_set:
                 mainlist = list;
                 listview = (ListView) view_menu.findViewById(R.id.menu_category_listview);
                 menuAdapter = new MenuAdapter();
-
                 listview.setAdapter(menuAdapter);
                 listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                         mPosition = position;
                         if (position == 0) {
                             page = 1;
                             url = GetUrl.getShareAllUrl(page);
                             HttpUtils.load(url).callBack(ShareFragment.this, 4);
                             popupWindow.dismiss();
-
                         } else if (position == 1) {
                             page = 1;
                             url = GetUrl.getShareShopUrl(page);
@@ -185,12 +196,11 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                         } else if (position > 2) {
                             page = 1;
                             url = GetUrl.getShareCategoryUrl(position - 2, page);
+                            itemsBeanList.clear();
                             HttpUtils.load(url).callBack(ShareFragment.this, 4);
                             popupWindow.dismiss();
-
                         }
                         if (position == 2) {
-
                             count++;
                             if (count % 2 != 0) {
                                 mainlist.addAll(mlist);
@@ -225,24 +235,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     }
 
 
-    private int mPosition;
-    private LinkedList<Share_conver> imglist = new LinkedList<>();
-    private PullToRefreshGridView refreshgrid;
-    private GridView gridview;
-    private int page = 1;
-    private Myadapter myadapter;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            refreshgrid.onRefreshComplete();
-            myadapter.notifyDataSetChanged();
-        }
-    };
-
     private void initdata() {
-
-
         HttpUtils.load(url).callBack(ShareFragment.this, 1);
     }
 
@@ -267,7 +260,8 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                 refreshView.getLoadingLayoutProxy()
                         .setLastUpdatedLabel("最后更新" + label);
                 page = 1;
-                HttpUtils.load(url).callBack(ShareFragment.this, 4);
+                itemsBeanList.clear();
+                HttpUtils.load(GetUrl.getShareAllUrl(page)).callBack(ShareFragment.this, 4);
 
             }
 
@@ -294,7 +288,7 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
 
         @Override
         public int getCount() {
-            return imglist.size();
+            return itemsBeanList.size();
         }
 
         @Override
@@ -318,13 +312,13 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
                 viewHolder = (ViewHolder) view.getTag();
             }
             viewHolder.imageView.setImageResource(R.mipmap.ic_launcher);
-            final Share_conver share_conver = imglist.get(position);
-            Picasso.with(mContext).load(share_conver.img).into(viewHolder.imageView);
+            final ShareBean.DataBean.ItemsBean itemsBean = itemsBeanList.get(position);
+            Picasso.with(mContext).load(itemsBean.getGoods_image()).into(viewHolder.imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, Goods_DetailActivity.class);
-                    intent.putExtra("id", share_conver.id);
+                    intent.putExtra("id", itemsBean.getGoods_id());
                     startActivity(intent);
                 }
             });
@@ -345,46 +339,23 @@ public class ShareFragment extends Fragment implements View.OnClickListener, Jso
     public void successJson(String result, int requestCode) {
         Gson gson = new Gson();
         ShareBean shareBean = gson.fromJson(result, ShareBean.class);
-
         if (requestCode == 1) {
-
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-            for (int i = 0; i < items.size(); i++) {
-                String goods_image = items.get(i).getGoods_image();
-                String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-                imglist.addFirst(share_conver);
-                handler.sendEmptyMessage(1);
-            }
+            itemsBeanList.addAll(items);
+            myadapter.notifyDataSetChanged();
         }
         //上拉
         if (requestCode == 2) {
 
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-            for (int i = 0; i < items.size(); i++) {
-
-                String goods_image = items.get(i).getGoods_image();
-                String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-                imglist.addLast(share_conver);
-                //刷新
-                // myadapter.notifyDataSetChanged();
-                handler.sendEmptyMessage(1);
-            }
+            itemsBeanList.addAll(items);
+            handler.sendEmptyMessage(1);
         }
         //下拉
         if (requestCode == 4) {
-            LinkedList<Share_conver> headlist = new LinkedList<>();
             List<ShareBean.DataBean.ItemsBean> items = shareBean.getData().getItems();
-            for (int i = 0; i < items.size(); i++) {
-                String goods_image = items.get(i).getGoods_image();
-
-                String goods_id = items.get(i).getGoods_id();
-                Share_conver share_conver = new Share_conver(goods_image, goods_id);
-                headlist.addFirst(share_conver);
-                imglist = headlist;
-                handler.sendEmptyMessage(1);
-            }
+            itemsBeanList.addAll(items);
+            handler.sendEmptyMessage(1);
         }
     }
 }

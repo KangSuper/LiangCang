@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlank"
+    tools:context="com.xiekang.king.liangcang.activity.BeforeLoadActivity">
+
+    <ImageView
+        android:id="@+id/before_weibo_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_weibo"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/before_qq_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_tencent_qq"
+        android:layout_alignBottom="@id/before_weibo_image"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@id/before_weibo_image"/>
+
+    <ImageView
+        android:id="@+id/before_douban_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_douban"
+        android:layout_alignBottom="@id/before_weibo_image"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/before_weibo_image"/>
+
+    <ImageView
+        android:id="@+id/before_weixin_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_tencent_weixin"
+        android:layout_alignBottom="@id/before_weibo_image"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/before_douban_image"/>
+
+    <LinearLayout
+        android:id="@+id/before_linear"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_above="@id/before_weibo_image"
+        android:layout_margin="15dp"
+        android:layout_height="1dp"
+        android:orientation="horizontal"/>
+
+    <TextView
+        android:id="@+id/before_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="社交账户登录"
+        android:layout_above="@id/before_linear"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/before_load_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:layout_above="@id/before_text_view"
+        android:background="@color/colorWhite"
+        android:text="登录"
+        android:textColor="@color/colorBlank"/>
+
+    <Button
+        android:id="@+id/before_register_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_above="@id/before_load_btn"
+        android:background="@color/colorWhite"
+        android:paddingRight="5dp"
+        android:text="注册良仓"
+        android:drawableRight="@drawable/register_bonus"
+        android:textColor="@color/colorBlank"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_login_register"
+        android:scaleType="fitXY"
+        android:layout_above="@id/before_register_btn"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/icon_large"
+        android:layout_marginTop="100dp"/>
+
+    <ImageView
+        android:src="@drawable/ic_pack_close"
+        android:layout_margin="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
